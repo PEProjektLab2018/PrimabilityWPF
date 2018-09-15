@@ -5,17 +5,17 @@
      */
     public class Power
     {
-        private uint _mantissa;
-        private uint _exponent;
+        private ulong _mantissa;
+        private ulong _exponent;
 
         // Only getter, unmutable property
-        public uint Mantissa { get => _mantissa; }
-        public uint Exponent { get => _exponent; set => _exponent = value; }
+        public ulong Mantissa { get => _mantissa; }
+        public ulong Exponent { get => _exponent; set => _exponent = value; }
 
-        public Power(uint mantissa, uint exponent)
+        public Power(ulong mantissa, ulong exponent)
         {
             this._mantissa = mantissa;
-            this.Exponent = exponent;
+            this._exponent = exponent;
         }
     }
 }

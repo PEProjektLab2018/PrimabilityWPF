@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProjektLab"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:Prime="clr-namespace:Prime;assembly=Prime" x:Class="ProjektLab.Prime"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Height="Auto" Background="White"
     >
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="800">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -28,7 +29,7 @@
             <TextBox.Text>
                 <Binding UpdateSourceTrigger="PropertyChanged" Path="MyNumber.LocalNumber" NotifyOnValidationError="True">
                     <Binding.ValidationRules>
-                        <local:StringToUintValidationRule ValidationStep="RawProposedValue" ValidatesOnTargetUpdated="True"/>
+                        <local:StringToUint64ValidationRule ValidationStep="RawProposedValue" ValidatesOnTargetUpdated="True"/>
                         <local:GreaterThanZeroValidationRule ValidationStep="RawProposedValue" ValidatesOnTargetUpdated="True"/>
                     </Binding.ValidationRules>
                 </Binding>
@@ -50,10 +51,32 @@
                 ></Button>
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
             <Separator/>
-            <TextBlock Name="IsPrimeResult">
-            </TextBlock>
-            <TextBlock Name="FactorsResult">
-            </TextBlock>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Erastothenes teszt:"/>
+                <Label Name="Erastothenes" Grid.Row="0" Grid.Column="1"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Fermat teszt:"/>
+                <Label Name="Fermat" Grid.Row="1" Grid.Column="1"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Solovay-Strassen teszt:"/>
+                <Label Name="SolovayStrassen" Grid.Row="2" Grid.Column="1"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Miller-Rabin teszt:"/>
+                <Label Name="MillerRabin" Grid.Row="3" Grid.Column="1"/>
+                <Separator Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Width="Auto"/>
+                <Label Grid.Row="5" Grid.Column="0" Content="Prímtényezős felbontás:"/>
+                <Label Name="FactorsResult" Grid.Row="5" Grid.Column="1"/>
+            </Grid>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -4,9 +4,9 @@ namespace Prime
 {
     public class Number
     {
-        private uint _number;
+        private ulong _number;
 
-        public uint LocalNumber { get => _number; set => _number = value; }
+        public ulong LocalNumber { get => _number; set => _number = value; }
 
         public Number()
         {
@@ -20,7 +20,7 @@ namespace Prime
         public Factors FactorizeNumber()
         {
             // Make a copy of the stored number, and use it further
-            uint number = _number;
+            ulong number = _number;
             Factors factors = new Factors();
             while (number % 2 == 0)
             {

@@ -11,10 +11,10 @@ namespace Prime
      */
     public static class Tests
     {
-        public static bool Erastothenes(int number)
+        public static bool Erastothenes(ulong number)
         {
             Boolean valid = false;
-            if ((number > -3 && number < 3) || (number % 2 == 0))
+            if (number < 3 || number % 2 == 0)
             {
                 //0,1,2 not prime
                 return false;
@@ -27,7 +27,7 @@ namespace Prime
         /**
          * Helper method for Erastothenes algorithm
          */
-        private static bool Erastothenes(int number, int maximum)
+        private static bool Erastothenes(ulong number, ulong maximum)
         {
             bool valid = false;
 
@@ -40,13 +40,13 @@ namespace Prime
                 numbers[i] = true;
             }
 
-            int p = 2;
+            ulong p = 2;
 
             while (Math.Pow(p, 2) < maximum)
             {
                 if (numbers[p])
                 {
-                    int j = (int)Math.Pow(p, 2);
+                    ulong j = (ulong)Math.Pow(p, 2);
 
                     while (j < maximum)
                     {
@@ -58,7 +58,7 @@ namespace Prime
                 p++;
             }
 
-            for (int i = 0; i < numbers.Length; i++)
+            for (ulong i = 0; i < (ulong) numbers.Length; i++)
             {
                 if ((i + 1) == number)
                 {
@@ -73,7 +73,7 @@ namespace Prime
          * Wilson test
          * n is prime if n > 1 and n|(n-1)!+1
          */
-        public static bool Wilson(uint number)
+        public static bool Wilson(ulong number)
         {
             return 
                 number > 1 && 
@@ -84,7 +84,7 @@ namespace Prime
         /**
          * Factorial calculation - n!
          */
-        private static ulong Factorial(uint number)
+        private static ulong Factorial(ulong number)
         {
             return number == 1 ? 1 : number * Factorial(number - 1);
         }
@@ -129,10 +129,10 @@ namespace Prime
         /**
          * Fermat test
          */
-        public static bool Fermat(ulong number, int chance)
+        public static bool Fermat(ulong number, ulong chance)
         {
             ulong a;
-            int i;
+            ulong i;
 
             // Shortcut for even numbers
             if (number % 2 == 0)
@@ -191,11 +191,11 @@ namespace Prime
         }
 
         //Solovay–Strassen
-        public static bool SolovayStrassen(ulong number, int chance)
+        public static bool SolovayStrassen(ulong number, ulong chance)
         {
             ulong a;
             ulong gcd;
-            int i;
+            ulong i;
             for (i = 0; i < chance; i++)
             {
                 a = generateRandomNumber(number);

@@ -14,7 +14,7 @@ namespace Prime
             this.list = new List<Power>();
         }
 
-        public Factors Add(uint mantissa)
+        public Factors Add(ulong mantissa)
         {
             // Find Power by mantissa - lambda function
             Predicate<Power> predicate = (el => el.Mantissa == mantissa);

@@ -8,13 +8,13 @@ using System.Windows.Controls;
 
 namespace ProjektLab
 {
-    public class StringToUintValidationRule : ValidationRule
+    public class StringToUint64ValidationRule : ValidationRule
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            uint test;
+            ulong test;
 
-            if(value.ToString() == "" || uint.TryParse(value.ToString(), out test))
+            if(value.ToString() == "" || ulong.TryParse(value.ToString(), out test))
             {
                 return ValidationResult.ValidResult;
             }
