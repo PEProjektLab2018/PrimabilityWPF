@@ -35,7 +35,7 @@ namespace ProjektLab
         {
             Factors Factors = MyNumber.FactorizeNumber();
 
-            InlineCollection ResultInlines = Result.Inlines;
+            InlineCollection ResultInlines = FactorsResult.Inlines;
             ResultInlines.Clear();
 
             for (int i = 0; i < Factors.List.Count(); i++)

@@ -43,14 +43,16 @@
                 </ControlTemplate>
             </Validation.ErrorTemplate>
         </TextBox>
-        <Button Content="Ellenőrzés" Grid.Row="2" Grid.ColumnSpan="2"
+        <Button Content="Ellenőrzés" Grid.Row="2" Grid.ColumnSpan="1"
                 Click="Button_Click"
                 Name="Button"
                 IsEnabled="False"
                 ></Button>
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
             <Separator/>
-            <TextBlock Name="Result">
+            <TextBlock Name="IsPrimeResult">
+            </TextBlock>
+            <TextBlock Name="FactorsResult">
             </TextBlock>
         </StackPanel>
     </Grid>
