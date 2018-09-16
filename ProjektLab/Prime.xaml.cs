@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,6 +23,8 @@ namespace ProjektLab
     /// </summary>
     public partial class Prime : UserControl
     {
+        private List<Thread> ThreadList;
+
         public MyNumber MyNumber { get; set; }
         public uint Chance { get; set; }
         public Prime()
@@ -30,6 +33,7 @@ namespace ProjektLab
 
             MyNumber = new MyNumber();
             Chance = 10;
+            ThreadList = new List<Thread>();
 
             DataContext = this;
         }
@@ -58,12 +62,21 @@ namespace ProjektLab
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button.IsEnabled = false;
+            lock(ThreadList)
+            {
+                foreach (Thread Thread in ThreadList)
+                {
+                    Thread.Interrupt();
+                }
+                ThreadList.Clear();
+            }
             ResetPrimeTests();
 
             RunTestErastothenes();
             RunTestFermat();
             RunTestSolovayStrassen();
             RunTestMillerRabin();
+
             RunFactorization();
 
             Button.IsEnabled = true;
@@ -73,7 +86,11 @@ namespace ProjektLab
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            bool Test = await Task.Run<bool>(() => Tests.Erastothenes(MyNumber.LocalNumber));
+            bool Test = await Task.Run<bool>(() => 
+            {
+                ThreadList.Add(Thread.CurrentThread);
+                return Tests.Erastothenes(MyNumber.LocalNumber);
+            });
             sw.Stop();
             ErastothenesSpinner.Visibility = Visibility.Hidden;
             ErastothenesResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
@@ -83,41 +100,68 @@ namespace ProjektLab
         private async void RunTestFermat()
         {
             Stopwatch sw = new Stopwatch();
+            Thread Thread = null;
             sw.Start();
-            bool Test = await Task.Run<bool>(() => Tests.Fermat(MyNumber.LocalNumber, Chance));
+            bool Test = await Task.Run<bool>(() => 
+            {
+                Thread = Thread.CurrentThread;
+                ThreadList.Add(Thread);
+                return Tests.Fermat(MyNumber.LocalNumber, Chance);
+            });
             sw.Stop();
             FermatSpinner.Visibility = Visibility.Hidden;
             FermatResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
             FermatResult.Visibility = Visibility.Visible;
+            ThreadList.Remove(Thread);
         }
 
         private async void RunTestSolovayStrassen()
         {
             Stopwatch sw = new Stopwatch();
+            Thread Thread = null;
             sw.Start();
-            bool Test = await Task.Run<bool>(() => Tests.SolovayStrassen(MyNumber.LocalNumber, Chance));
+            bool Test = await Task.Run<bool>(() =>
+            {
+                Thread = Thread.CurrentThread;
+                ThreadList.Add(Thread);
+                return Tests.SolovayStrassen(MyNumber.LocalNumber, Chance);
+            });
             sw.Stop();
             SolovayStrassenSpinner.Visibility = Visibility.Hidden;
             SolovayStrassenResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
             SolovayStrassenResult.Visibility = Visibility.Visible;
+            ThreadList.Remove(Thread);
         }
 
         private async void RunTestMillerRabin()
         {
             Stopwatch sw = new Stopwatch();
+            Thread Thread = null;
             sw.Start();
-            bool Test = await Task.Run<bool>(() => Tests.MillerRabin(MyNumber.LocalNumber));
+            bool Test = await Task.Run<bool>(() =>
+            {
+                Thread = Thread.CurrentThread;
+                ThreadList.Add(Thread);
+                return Tests.MillerRabin(MyNumber.LocalNumber);
+            });
             sw.Stop();
             MillerRabinSpinner.Visibility = Visibility.Hidden;
             MillerRabinResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
             MillerRabinResult.Visibility = Visibility.Visible;
+            ThreadList.Remove(Thread);
         }
 
         private async void RunFactorization()
         {
             Stopwatch sw = new Stopwatch();
+            Thread Thread = null;
             sw.Start();
-            Factors Factors = await Task.Run<Factors>(() => MyNumber.FactorizeNumber());
+            Factors Factors = await Task.Run<Factors>(() =>
+            {
+                Thread = Thread.CurrentThread;
+                ThreadList.Add(Thread);
+                return MyNumber.FactorizeNumber();
+            });
             sw.Stop();
 
             TextBlock FactorResultTextBlock = new TextBlock();
@@ -147,6 +191,7 @@ namespace ProjektLab
             FactorsSpinner.Visibility = Visibility.Hidden;
             FactorsResult.Content = FactorResultTextBlock;
             FactorsResult.Visibility = Visibility.Visible;
+            ThreadList.Remove(Thread);
         }
 
         private void TextBox_Error(object sender, ValidationErrorEventArgs e)
