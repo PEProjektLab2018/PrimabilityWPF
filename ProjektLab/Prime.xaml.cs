@@ -86,7 +86,16 @@ namespace ProjektLab
 
         private async void RunTestErastothenes()
         {
+            // 47995852 * 2 - 1 - Magic number - odd numbers in dictionary
+            if (MyNumber.LocalNumber > 47995853 * 2 - 1)
+            {
+                ErastothenesSpinner.Visibility = Visibility.Hidden;
+                ErastothenesResult.Text = "A szám túl nagy. Teszt nem elvégezhető";
+                ErastothenesResult.Visibility = Visibility.Visible;
+                return;
+            }
             Stopwatch sw = new Stopwatch();
+            Thread Thread = null;
             sw.Start();
             bool Test = await Task.Run<bool>(() => 
             {
@@ -97,6 +106,7 @@ namespace ProjektLab
             ErastothenesSpinner.Visibility = Visibility.Hidden;
             ErastothenesResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
             ErastothenesResult.Visibility = Visibility.Visible;
+            ThreadList.Remove(Thread);
         }
 
         private async void RunTestFermat()
@@ -114,7 +124,7 @@ namespace ProjektLab
             });
             sw.Stop();
             FermatSpinner.Visibility = Visibility.Hidden;
-            FermatResult.Text = (Test ? "Valószínű Prím" : "Nem Prím") + "\nProbálkozások száma: " + Chance + "\nSzámítási idő: " + sw.Elapsed;
+            FermatResult.Text = (Test ? "Valószínű Prím" : "Nem Prím") + "\nPróbálkozások száma: " + Chance + "\nSzámítási idő: " + sw.Elapsed;
             FermatResult.Visibility = Visibility.Visible;
             ThreadList.Remove(Thread);
         }

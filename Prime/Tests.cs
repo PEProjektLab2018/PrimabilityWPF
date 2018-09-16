@@ -37,60 +37,44 @@ namespace Prime
 
         public static bool Erastothenes(ulong number)
         {
-            Boolean valid = false;
             if (number < 3 || number % 2 == 0)
             {
                 //0,1,2 not prime
                 return false;
             }
 
-            valid = Erastothenes(number, number + 1);
-            return valid;
+            Dictionary<ulong, bool>Sieve = MakeSieveErastothenes(number);
+            return Sieve.ContainsKey(number) && Sieve[number];
         }
 
         /**
          * Helper method for Erastothenes algorithm
          */
-        private static bool Erastothenes(ulong number, ulong maximum)
+        private static Dictionary<ulong, bool> MakeSieveErastothenes(ulong maximum)
         {
-            bool valid = false;
+            Dictionary<ulong, bool> IsPrime = new Dictionary<ulong, bool>();
 
-            bool[] numbers = new bool[maximum];
-
-            numbers[0] = false;
-
-            for (int i = 1; i < numbers.Length; i++)
+            for (ulong i = 3; i <= maximum; i+=2)
             {
-                numbers[i] = true;
+                IsPrime[i] = true;
             }
 
-            ulong p = 2;
 
-            while (Math.Pow(p, 2) < maximum)
+            // Cross out multiples.
+            for (ulong i = 3; i <= maximum; i++)
             {
-                if (numbers[p])
+                // See if i is probably a prime.
+                if (IsPrime.ContainsKey(i) && IsPrime[i])
                 {
-                    ulong j = (ulong)Math.Pow(p, 2);
-
-                    while (j < maximum)
+                    // Knock out multiples of i.
+                    for (ulong j = i * 2; j <= maximum; j += i)
                     {
-                        numbers[j] = false;
-                        j = j + p;
+                        IsPrime[j] = false;
                     }
                 }
-
-                p++;
             }
 
-            for (ulong i = 0; i < (ulong) numbers.Length; i++)
-            {
-                if ((i + 1) == number)
-                {
-                    valid = numbers[i];
-                }
-            }
-
-            return valid;
+            return IsPrime;
         }
 
         /**
@@ -178,6 +162,11 @@ namespace Prime
          */
         public static ulong generateRandomNumber(ulong max, ulong min = 3)
         {
+            if (max == min)
+            {
+                return max;
+            }
+
             Random RandomGenerator = new Random();
 
             byte[] buf = new byte[8];
