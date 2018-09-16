@@ -26,13 +26,11 @@ namespace ProjektLab
         private List<Thread> ThreadList;
 
         public MyNumber MyNumber { get; set; }
-        public uint Chance { get; set; }
         public Prime()
         {
             InitializeComponent();
 
             MyNumber = new MyNumber();
-            Chance = 10;
             ThreadList = new List<Thread>();
 
             DataContext = this;
@@ -44,15 +42,18 @@ namespace ProjektLab
             FermatSpinner.Visibility = Visibility.Visible;
             SolovayStrassenSpinner.Visibility = Visibility.Visible;
             MillerRabinSpinner.Visibility = Visibility.Visible;
+            NaiveSpinner.Visibility = Visibility.Visible;
 
             ErastothenesResult.Visibility = Visibility.Hidden;
             FermatResult.Visibility = Visibility.Hidden;
             SolovayStrassenResult.Visibility = Visibility.Hidden;
             MillerRabinResult.Visibility = Visibility.Hidden;
+            NaiveResult.Visibility = Visibility.Hidden;
             ErastothenesResult.Text = "";
             FermatResult.Text = "";
             SolovayStrassenResult.Text = "";
             MillerRabinResult.Text = "";
+            NaiveResult.Text = "";
 
             FactorsSpinner.Visibility = Visibility.Visible;
             FactorsResult.Visibility = Visibility.Hidden;
@@ -76,6 +77,7 @@ namespace ProjektLab
             RunTestFermat();
             RunTestSolovayStrassen();
             RunTestMillerRabin();
+            RunTestNaive();
 
             RunFactorization();
 
@@ -99,36 +101,40 @@ namespace ProjektLab
 
         private async void RunTestFermat()
         {
+            ulong Chance = 0;
             Stopwatch sw = new Stopwatch();
             Thread Thread = null;
             sw.Start();
             bool Test = await Task.Run<bool>(() => 
             {
+                Chance = Tests.generateRandomNumber(MyNumber.LocalNumber - 1, 1);
                 Thread = Thread.CurrentThread;
                 ThreadList.Add(Thread);
                 return Tests.Fermat(MyNumber.LocalNumber, Chance);
             });
             sw.Stop();
             FermatSpinner.Visibility = Visibility.Hidden;
-            FermatResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
+            FermatResult.Text = (Test ? "Valószínű Prím" : "Nem Prím") + "\nProbálkozások száma: " + Chance + "\nSzámítási idő: " + sw.Elapsed;
             FermatResult.Visibility = Visibility.Visible;
             ThreadList.Remove(Thread);
         }
 
         private async void RunTestSolovayStrassen()
         {
+            ulong Chance = 0;
             Stopwatch sw = new Stopwatch();
             Thread Thread = null;
             sw.Start();
             bool Test = await Task.Run<bool>(() =>
             {
+                Chance = Tests.generateRandomNumber(MyNumber.LocalNumber - 1, 1);
                 Thread = Thread.CurrentThread;
                 ThreadList.Add(Thread);
                 return Tests.SolovayStrassen(MyNumber.LocalNumber, Chance);
             });
             sw.Stop();
             SolovayStrassenSpinner.Visibility = Visibility.Hidden;
-            SolovayStrassenResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
+            SolovayStrassenResult.Text = (Test ? "Valószínű Prím" : "Nem Prím") + "\nRandom teszt-szám: " + Chance + "\nSzámítási idő: " + sw.Elapsed;
             SolovayStrassenResult.Visibility = Visibility.Visible;
             ThreadList.Remove(Thread);
         }
@@ -148,6 +154,24 @@ namespace ProjektLab
             MillerRabinSpinner.Visibility = Visibility.Hidden;
             MillerRabinResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
             MillerRabinResult.Visibility = Visibility.Visible;
+            ThreadList.Remove(Thread);
+        }
+
+        private async void RunTestNaive()
+        {
+            Stopwatch sw = new Stopwatch();
+            Thread Thread = null;
+            sw.Start();
+            bool Test = await Task.Run<bool>(() =>
+            {
+                Thread = Thread.CurrentThread;
+                ThreadList.Add(Thread);
+                return Tests.Naive(MyNumber.LocalNumber);
+            });
+            sw.Stop();
+            NaiveSpinner.Visibility = Visibility.Hidden;
+            NaiveResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
+            NaiveResult.Visibility = Visibility.Visible;
             ThreadList.Remove(Thread);
         }
 

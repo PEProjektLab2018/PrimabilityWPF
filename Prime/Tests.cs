@@ -11,6 +11,30 @@ namespace Prime
      */
     public static class Tests
     {
+        public static bool Naive(ulong number)
+        {
+            if (number < 4 && number > 1) {
+                return true;
+            }
+            if (number % 2 == 0)
+            {
+                return false;
+            }
+
+            ulong i = 3;
+            ulong SqrtOfNumber = Convert.ToUInt64(Math.Sqrt(number));
+
+            while (i <= SqrtOfNumber)
+            {
+                if (number % i == 0)
+                {
+                    return false;
+                }
+                i += 2;
+            }
+            return true;
+        }
+
         public static bool Erastothenes(ulong number)
         {
             Boolean valid = false;
@@ -129,37 +153,30 @@ namespace Prime
         /**
          * Fermat test
          */
-        public static bool Fermat(ulong number, ulong chance)
+        public static bool Fermat(ulong number, ulong Chance)
         {
-            ulong a;
-            ulong i;
-
             // Shortcut for even numbers
             if (number % 2 == 0)
             {
                 return false;
             }
-            for (i = 0; i < chance; i++)
+            for (ulong i = 0; i < Chance; i++)
             {
-                a = generateRandomNumber(number);
-                while (getGreatestCommonDivisor(Convert.ToUInt64(number), Convert.ToUInt64(a)) != 1)
-                {
-                    a = generateRandomNumber(number);
-                }
+                ulong a = generateRandomNumber(number-1, 1);
                 // Fermat theorem
-                if ((a ^ (number - 1) % number) == 1)
+                if ((a ^ (number - 1) % number) != 1)
                 {
-                    break;
+                    return false;
                 }
             }
 
-            return i == chance;
+            return true;
         }
 
         /**
          * Generate 64bit unsigned integer value
          */
-        private static ulong generateRandomNumber(ulong max, ulong min = 3)
+        public static ulong generateRandomNumber(ulong max, ulong min = 3)
         {
             Random RandomGenerator = new Random();
 

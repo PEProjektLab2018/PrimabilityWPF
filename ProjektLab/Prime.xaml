@@ -133,9 +133,26 @@
                         <TextBlock Name="MillerRabinResult" Visibility="Hidden"></TextBlock>
                     </StackPanel>
                 </Label>
-                <Separator Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Width="Auto"/>
-                <Label Grid.Row="5" Grid.Column="0" Content="Prímtényezős felbontás:"/>
-                <Label Name="Factors" Grid.Row="5" Grid.Column="1">
+                <Label Grid.Row="4" Grid.Column="0">
+                    <TextBlock>
+                        Naív teszt
+                        <fa:FontAwesome Icon="InfoCircle">
+                            <fa:FontAwesome.ToolTip>
+                                Leírás
+                            </fa:FontAwesome.ToolTip>
+                        </fa:FontAwesome>
+                        :
+                    </TextBlock>
+                </Label>
+                <Label Name="Naive" Grid.Row="4" Grid.Column="1">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:FontAwesome Icon="Spinner" Spin="True" Name="NaiveSpinner" Visibility="Hidden"/>
+                        <TextBlock Name="NaiveResult" Visibility="Hidden"></TextBlock>
+                    </StackPanel>
+                </Label>
+                <Separator Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" Width="Auto"/>
+                <Label Grid.Row="6" Grid.Column="0" Content="Prímtényezős felbontás:"/>
+                <Label Name="Factors" Grid.Row="6" Grid.Column="1">
                     <StackPanel Orientation="Horizontal">
                         <fa:FontAwesome Icon="Spinner" Spin="True" Name="FactorsSpinner" Visibility="Hidden"/>
                         <Label Name="FactorsResult" Visibility="Hidden"></Label>
