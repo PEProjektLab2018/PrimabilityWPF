@@ -24,12 +24,8 @@ namespace ProjektLab
     {
         public MyNumber MyNumber { get; set; }
         public uint Chance { get; set; }
-        private static FontAwesome.WPF.FontAwesome SpinningIcon;
         public Prime()
         {
-            SpinningIcon = new FontAwesome.WPF.FontAwesome();
-            SpinningIcon.Icon = FontAwesome.WPF.FontAwesomeIcon.Spinner;
-            SpinningIcon.Spin = true;
             InitializeComponent();
 
             MyNumber = new MyNumber();
@@ -38,14 +34,91 @@ namespace ProjektLab
             DataContext = this;
         }
 
+        private void ResetPrimeTests()
+        {
+            ErastothenesSpinner.Visibility = Visibility.Visible;
+            FermatSpinner.Visibility = Visibility.Visible;
+            SolovayStrassenSpinner.Visibility = Visibility.Visible;
+            MillerRabinSpinner.Visibility = Visibility.Visible;
+
+            ErastothenesResult.Visibility = Visibility.Hidden;
+            FermatResult.Visibility = Visibility.Hidden;
+            SolovayStrassenResult.Visibility = Visibility.Hidden;
+            MillerRabinResult.Visibility = Visibility.Hidden;
+            ErastothenesResult.Text = "";
+            FermatResult.Text = "";
+            SolovayStrassenResult.Text = "";
+            MillerRabinResult.Text = "";
+
+            FactorsSpinner.Visibility = Visibility.Visible;
+            FactorsResult.Visibility = Visibility.Hidden;
+            FactorsResult.Content = "";
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Erastothenes.Content = SpinningIcon;
-            Fermat.Content = SpinningIcon;
-            SolovayStrassen.Content = SpinningIcon;
-            MillerRabin.Content = SpinningIcon;
+            Button.IsEnabled = false;
+            ResetPrimeTests();
 
-            Factors Factors = MyNumber.FactorizeNumber();
+            RunTestErastothenes();
+            RunTestFermat();
+            RunTestSolovayStrassen();
+            RunTestMillerRabin();
+            RunFactorization();
+
+            Button.IsEnabled = true;
+        }
+
+        private async void RunTestErastothenes()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            bool Test = await Task.Run<bool>(() => Tests.Erastothenes(MyNumber.LocalNumber));
+            sw.Stop();
+            ErastothenesSpinner.Visibility = Visibility.Hidden;
+            ErastothenesResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
+            ErastothenesResult.Visibility = Visibility.Visible;
+        }
+
+        private async void RunTestFermat()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            bool Test = await Task.Run<bool>(() => Tests.Fermat(MyNumber.LocalNumber, Chance));
+            sw.Stop();
+            FermatSpinner.Visibility = Visibility.Hidden;
+            FermatResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
+            FermatResult.Visibility = Visibility.Visible;
+        }
+
+        private async void RunTestSolovayStrassen()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            bool Test = await Task.Run<bool>(() => Tests.SolovayStrassen(MyNumber.LocalNumber, Chance));
+            sw.Stop();
+            SolovayStrassenSpinner.Visibility = Visibility.Hidden;
+            SolovayStrassenResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
+            SolovayStrassenResult.Visibility = Visibility.Visible;
+        }
+
+        private async void RunTestMillerRabin()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            bool Test = await Task.Run<bool>(() => Tests.MillerRabin(MyNumber.LocalNumber));
+            sw.Stop();
+            MillerRabinSpinner.Visibility = Visibility.Hidden;
+            MillerRabinResult.Text = (Test ? "Prím" : "Nem Prím") + "\nSzámítási idő: " + sw.Elapsed;
+            MillerRabinResult.Visibility = Visibility.Visible;
+        }
+
+        private async void RunFactorization()
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Factors Factors = await Task.Run<Factors>(() => MyNumber.FactorizeNumber());
+            sw.Stop();
 
             TextBlock FactorResultTextBlock = new TextBlock();
 
@@ -68,34 +141,12 @@ namespace ProjektLab
                     });
                 }
             }
+            FactorResultTextBlock.Inlines.Add(new LineBreak());
+            FactorResultTextBlock.Inlines.Add("Számítási idő: " + sw.Elapsed);
 
+            FactorsSpinner.Visibility = Visibility.Hidden;
             FactorsResult.Content = FactorResultTextBlock;
-
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            bool ErastothenesTest = Tests.Erastothenes(MyNumber.LocalNumber);
-            sw.Stop();
-            Erastothenes.Content = (ErastothenesTest ? "Prím" : "Nem Prím") + " Számítási idő: " + sw.Elapsed;
-
-            sw.Reset();
-            sw.Start();
-            bool FermatTest = Tests.Fermat(MyNumber.LocalNumber, Chance);
-            sw.Stop();
-            Fermat.Content = (FermatTest ? "Prím" : "Nem Prím") + " Számítási idő: " + sw.Elapsed;
-
-            sw.Reset();
-            sw.Start();
-            bool SolovayStrassenTest = Tests.SolovayStrassen(MyNumber.LocalNumber, Chance);
-            sw.Stop();
-            SolovayStrassen.Content = (SolovayStrassenTest ? "Prím" : "Nem Prím") + " Számítási idő: " + sw.Elapsed;
-
-            sw.Reset();
-            sw.Start();
-            bool MillerRabinTest = Tests.MillerRabin(MyNumber.LocalNumber);
-            sw.Stop();
-            MillerRabin.Content = (SolovayStrassenTest ? "Prím" : "Nem Prím") + " Számítási idő: " + sw.Elapsed;
-            sw.Reset();
+            FactorsResult.Visibility = Visibility.Visible;
         }
 
         private void TextBox_Error(object sender, ValidationErrorEventArgs e)
