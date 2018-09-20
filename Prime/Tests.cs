@@ -148,10 +148,16 @@ namespace Prime
             {
                 ulong a = generateRandomNumber(number-1, 1);
                 // Fermat theorem
-                if ((a ^ (number - 1) % number) != 1)
+                //if ((a ^ (number - 1) % number) != 1)
+
+                ulong result = a;
+                for (ulong power = 1; power < number - 1; power++)
                 {
-                    return false;
+                    result = (result * a) % number;
                 }
+
+                if (result != 1) { return false; }
+                
             }
 
             return true;
