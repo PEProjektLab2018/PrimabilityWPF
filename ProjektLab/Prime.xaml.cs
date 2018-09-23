@@ -54,10 +54,12 @@ namespace ProjektLab
             SolovayStrassenResult.Text = "";
             MillerRabinResult.Text = "";
             NaiveResult.Text = "";
-
             FactorsSpinner.Visibility = Visibility.Visible;
             FactorsResult.Visibility = Visibility.Hidden;
             FactorsResult.Content = "";
+            PrimePowerResult.Text = "";
+            
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -78,6 +80,7 @@ namespace ProjektLab
             RunTestSolovayStrassen();
             RunTestMillerRabin();
             RunTestNaive();
+            
 
             RunFactorization();
 
@@ -198,6 +201,8 @@ namespace ProjektLab
             });
             sw.Stop();
 
+            
+
             TextBlock FactorResultTextBlock = new TextBlock();
 
             for (int i = 0; i < Factors.List.Count(); i++)
@@ -225,6 +230,16 @@ namespace ProjektLab
             FactorsSpinner.Visibility = Visibility.Hidden;
             FactorsResult.Content = FactorResultTextBlock;
             FactorsResult.Visibility = Visibility.Visible;
+
+            if (Factors.List.Count == 1)
+            {
+                PrimePowerResult.Text = "Igen";
+            }
+            else
+            {
+                PrimePowerResult.Text = "Nem";
+            }
+            PrimePowerResult.Visibility = Visibility.Visible;
             ThreadList.Remove(Thread);
         }
 

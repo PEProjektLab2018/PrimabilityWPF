@@ -7,7 +7,7 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:Prime="clr-namespace:Prime;assembly=Prime" x:Class="ProjektLab.Prime"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="Auto" Background="White"
+             d:DesignHeight="392" d:DesignWidth="800" Height="Auto" Background="White"
     >
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="800">
         <Grid.ColumnDefinitions>
@@ -53,6 +53,7 @@
             <Separator/>
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -156,6 +157,13 @@
                     <StackPanel Orientation="Horizontal">
                         <fa:FontAwesome Icon="Spinner" Spin="True" Name="FactorsSpinner" Visibility="Hidden"/>
                         <Label Name="FactorsResult" Visibility="Hidden"></Label>
+                    </StackPanel>
+                </Label>
+                <Label Grid.Row="7" Grid.Column="0" Content="PrímHatvány:"/>
+                <Label Name="PrimePower" Grid.Row="7" Grid.Column="1">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:FontAwesome Icon="Spinner" Spin="True" Name="PrimePowerSpinner" Visibility="Hidden"/>
+                        <TextBlock Name="PrimePowerResult" Visibility="Hidden"></TextBlock>
                     </StackPanel>
                 </Label>
             </Grid>

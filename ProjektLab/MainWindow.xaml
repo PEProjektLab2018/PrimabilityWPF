@@ -11,7 +11,8 @@
             <TabItem Header="Prímszámok">
                 <local:Prime></local:Prime>
             </TabItem>
-            <TabItem Header="TabItem">
+            <TabItem Header="Polinom">
+                <local:Polinom></local:Polinom>
             </TabItem>
         </TabControl>
 
