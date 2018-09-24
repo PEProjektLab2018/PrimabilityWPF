@@ -24,9 +24,5 @@ namespace ProjektLab
         {
             InitializeComponent();
         }
-
-        private void button_click(object sender, EventArgs e) {
-
-        }
     }
 }
