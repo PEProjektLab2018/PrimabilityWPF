@@ -28,7 +28,8 @@ namespace ProjektLab
         private void btn_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-           tbkPolinom.Text +=btn.Content.ToString();
+            //tbkPolinom.Text +=btn.Content.ToString();
+            tbkPolinom.Inlines.Add(new Run(btn.Content.ToString()));
 
         }
 
