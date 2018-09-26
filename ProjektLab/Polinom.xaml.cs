@@ -34,5 +34,35 @@ namespace ProjektLab
 
         private void Button_Click(object sender, RoutedEventArgs e) { }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                /*
+                                foreach (Inline I in xsquare.Inlines)
+                                {
+
+                                    tbkPolinom.Inlines.Add(I);
+                                }
+                                */
+
+                tbkPolinom.Text += "x";
+                Run run = new Run();
+                run.Text = "2";
+                run.BaselineAlignment = BaselineAlignment.Superscript;
+                tbkPolinom.Inlines.Add(run);
+            }
+            catch (Exception ex) { }
+
+
+
+        }
+
+        private void btnPol_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnPol.Content.ToString() == "Polinom") {
+                btnPol.Content = "Művelet";
+            }
+        }
     }
 }
