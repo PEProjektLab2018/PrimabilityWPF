@@ -32,7 +32,8 @@
         <TextBlock Name="tbkPolinom" Grid.Column="1" Grid.ColumnSpan="5"></TextBlock>
         <Separator Grid.Row="1" Grid.ColumnSpan="6"></Separator>
         <TextBlock Text="Vizsgálandó polinom" Grid.Row="2"></TextBlock>
-        <Button Content="Polinom" Grid.Column="1" Grid.Row="3" Name="btnPol" Click="btnPol_Click"></Button>
+        <TextBlock Name="tbkPol1" Grid.Row="3" Grid.Column="0"></TextBlock>
+            <Button Content="Polinom" Grid.Column="1" Grid.Row="3" Name="btnPol" Click="btnPol_Click"></Button>
         <Button Content="CE" Grid.Column="2" Grid.Row="3"></Button>
         <Button Content="C" Grid.Column="3" Grid.Row="3"></Button>
         <Button Content="BKSP" Grid.Column="4" Grid.Row="3"></Button>

@@ -8,10 +8,10 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <TabControl >
-            <TabItem Header="Prímszámok">
+            <TabItem Header="Prímszámok" Name="tiPrime">
                 <local:Prime></local:Prime>
             </TabItem>
-            <TabItem Header="Polinom">
+            <TabItem Header="Polinom" Name="tiPolinom">
                 <local:Polinom></local:Polinom>
             </TabItem>
         </TabControl>

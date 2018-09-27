@@ -59,11 +59,28 @@ namespace ProjektLab
 
         }
 
+        
+
         private void btnPol_Click(object sender, RoutedEventArgs e)
         {
-            if (btnPol.Content.ToString() == "Polinom") {
-                btnPol.Content = "Művelet";
-            }
+            try {
+
+                if (btnPol.Content.ToString() == "Polinom") {
+                    btnPol.Content = "Művelet";
+                    foreach (Inline il in tbkPolinom.Inlines) {
+                        Run run = new Run();
+                        TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
+                        run.Text = tr.Text;
+                        run.BaselineAlignment = il.BaselineAlignment;        
+                         
+                        tbkPol1.Inlines.Add(run);
+                    }
+                
+ 
+                }
+            
+        }
+            catch (Exception ex) { }
         }
     }
 }

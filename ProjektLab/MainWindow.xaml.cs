@@ -24,6 +24,23 @@ namespace ProjektLab
         {
             InitializeComponent();
         }
-       
+
+        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Subtract)
+            {
+                if (tiPolinom.IsSelected) {
+                    
+
+                }
+                
+            }
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+        }
+
+
     }
 }
