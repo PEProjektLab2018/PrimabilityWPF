@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Polinom;
+
 
 namespace ProjektLab
 {
@@ -30,7 +32,8 @@ namespace ProjektLab
             Button btn = sender as Button;
             //tbkPolinom.Text +=btn.Content.ToString();
             tbkPolinom.Inlines.Add(new Run(btn.Content.ToString()));
-
+            
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) { }

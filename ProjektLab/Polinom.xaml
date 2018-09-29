@@ -45,6 +45,7 @@
         <Button Content="8" Grid.Column="3" Grid.Row="4" Name="btn_8" Click="btn_Click"></Button>
         <Button Content="7" Grid.Column="4" Grid.Row="4" Name="btn_7" Click="btn_Click"></Button>
         <Button Content="*" Grid.Column="5" Grid.Row="4" ></Button>
+        <TextBlock Name="tbkOperation" Grid.Column="0" Grid.Row="5" />
         <Button Grid.Column="1" Grid.Row="5" Click="Button_Click_1">
             <TextBlock FontFamily="Palatino Linotype">
             <Run>x</Run>
