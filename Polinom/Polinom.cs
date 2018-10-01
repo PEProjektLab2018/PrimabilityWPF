@@ -143,5 +143,45 @@ namespace Polinom
             }
             return pol;
         }
+
+        public static Polinom operator / (Polinom Polinom1, Polinom Polinom2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Polinom operator % (Polinom Polinom1, Polinom Polinom2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Polinom[] getIrreducible(int ElementNumber, int power) {
+
+            throw new NotImplementedException();
+
+        }
+
+        public override string ToString()
+        {
+            //return base.ToString();
+            string ret = "";
+
+            foreach (Monom m in list) {
+
+                if (m.Coefficient > 1) { ret += m.Coefficient; }
+                if (m.Exponent != 0) {
+                    if (m.Exponent == 1)
+                    {
+                        ret += m.Variable;
+                    }
+                    else {
+                        ret += m.Variable+"^"+m.Exponent;
+                    }
+
+                }
+                ret += " + ";
+            }
+            return ret.TrimEnd(new Char[] { ' ', '+' });
+        }
+
     }
 }
