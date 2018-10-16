@@ -131,9 +131,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Polinom\Polinom.csproj">
+    <ProjectReference Include="..\Polinom\PolinomClass.csproj">
       <Project>{65226ec8-443c-4246-8131-72f5556adf9f}</Project>
-      <Name>Polinom</Name>
+      <Name>PolinomClass</Name>
     </ProjectReference>
     <ProjectReference Include="..\Prime\Prime.csproj">
       <Project>{c2da47f1-7c22-477c-8e66-9530b6dbb9f5}</Project>

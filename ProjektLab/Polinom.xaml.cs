@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Polinom;
+using ClsPolinom;
 
 
 namespace ProjektLab
@@ -25,6 +15,7 @@ namespace ProjektLab
         public Polinom()
         {
             InitializeComponent();
+           // DataContext = this;
         }
 
         private void btn_Click(object sender, RoutedEventArgs e)
@@ -63,6 +54,7 @@ namespace ProjektLab
         }
 
         
+        
 
         private void btnPol_Click(object sender, RoutedEventArgs e)
         {
@@ -85,5 +77,26 @@ namespace ProjektLab
         }
             catch (Exception ex) { }
         }
+        private void equal_Click(object sender, RoutedEventArgs e)
+        {
+            
+            try
+            {
+                ClsPolinom.Polinom polinom=new ClsPolinom.Polinom();
+                
+                
+                polinom = ClsPolinom.Polinom.PolinomFromString(tbkPolinom.Text);
+               
+                
+
+                
+
+            }
+
+            catch (Exception ex) { }
+        }
     }
+
+   
+
 }

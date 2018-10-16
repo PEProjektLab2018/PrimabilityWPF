@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
-namespace Polinom
+namespace ClsPolinom
 {
-    class Polinom
+    public class Polinom
     {
 
         public class Enumerator
@@ -35,7 +36,7 @@ namespace Polinom
         public Polinom() { this.list = new List<Monom>(); }
 
         public Polinom add(Monom monom) {
-            Predicate<Monom> predicate = (mon => mon.Variable == monom.Variable && mon.Variable==monom.Variable);
+            Predicate<Monom> predicate = (mon => mon.Variable == monom.Variable && mon.Exponent==monom.Exponent);
             if (this.list.Exists(predicate))
             {
                 Monom m = this.list.Find(predicate);
@@ -167,7 +168,7 @@ namespace Polinom
 
             foreach (Monom m in list) {
 
-                if (m.Coefficient > 1) { ret += m.Coefficient; }
+                if (m.Coefficient > 1 || (m.Coefficient==1 && m.Exponent==0)) { ret += m.Coefficient; }
                 if (m.Exponent != 0) {
                     if (m.Exponent == 1)
                     {
@@ -183,5 +184,73 @@ namespace Polinom
             return ret.TrimEnd(new Char[] { ' ', '+' });
         }
 
+        public static Polinom PolinomFromString(string input) {
+            Monom m;
+            Regex regex ;
+            Match match;
+            Polinom retPolinom = new Polinom();
+            input="x^2+x+1";
+            //ulong intResult;
+            string[] arrinput = input.Split('-', '+');
+            for (int i = 0; i < arrinput.Count(); i++) {
+                m = new Monom();
+                /*
+              five kind of monom could be:
+                 1. only coefficient                                              12
+                 2. coefficient multiplied by first power of variable              6x
+                 3. only first power of variable (without coefficient)              x
+                 4. coefficient multiplied by variable powered more than one       8x^2
+                 5. only variable powered more than one (without coefficient)       x^2
+                 
+
+              */
+                // 1. 
+
+                //First, check whether monom has a variable
+
+                if (Regex.IsMatch(arrinput[i], @"[A-Za-z]"))
+                {
+                    m.Variable = Regex.Match(arrinput[i], @"[A-Za-z]").Value;
+                    regex = new Regex(@"([1-9]+)");
+                    //get coefficient, if exists
+                    if (Regex.IsMatch(arrinput[i], @"^([1-9]+)[A-Za-z]"))
+                    {
+
+                        match = regex.Match(arrinput[i]);
+                        m.Coefficient = Convert.ToInt64(match.Value);
+                        match = match.NextMatch();
+                        if (match.Success)
+                        {
+                            m.Exponent = Convert.ToUInt64(match.Value);
+                        }
+                        else
+                        {
+                            m.Exponent = 1;
+                        }
+                    }
+                    else {
+                        match = regex.Match(arrinput[i]);
+                        if (match.Success)
+                        {
+                            m.Exponent = Convert.ToUInt64(match.Value);
+                        }
+                        else m.Exponent = 1;
+                    }
+
+                }
+                else {
+                    m.Coefficient = Convert.ToInt64(arrinput[i]);
+                    m.Variable = "";
+                    m.Exponent = 0;
+
+                }
+
+                retPolinom.add(m);
+
+                }
+            return retPolinom;
+            }
+
+
+        }
     }
-}
