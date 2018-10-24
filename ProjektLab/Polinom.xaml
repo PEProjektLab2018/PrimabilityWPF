@@ -28,7 +28,7 @@
         <TextBlock Text="Adjon meg egy Polinomot" FontWeight="Bold" Foreground="Black" Background="White"
                    Grid.Row="0"
                    />
-        <TextBlock x:Name="tbkPolinom" Grid.ColumnSpan="5" Margin="289,2,40,3" Grid.RowSpan="2"><Run Text="12x^2+6x+7"/></TextBlock>
+        <TextBlock x:Name="tbkPolinom" Grid.ColumnSpan="5" Margin="289,2,40,3" Grid.RowSpan="2"/>
         <Separator Grid.Row="1" Grid.ColumnSpan="6"></Separator>
         <TextBlock Text="Vizsgálandó polinom" Grid.Row="2"></TextBlock>
         <TextBlock Name="tbkPol1" Grid.Row="3" Grid.Column="0"></TextBlock>

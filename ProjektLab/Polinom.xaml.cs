@@ -83,13 +83,30 @@ namespace ProjektLab
             try
             {
                 ClsPolinom.Polinom polinom=new ClsPolinom.Polinom();
-                
-                
-                polinom = ClsPolinom.Polinom.PolinomFromString(tbkPolinom.Text);
-               
-                
+                /*
+                string pol="";
 
-                
+                foreach (Inline il in tbkPolinom.Inlines)
+                {
+                    
+                    TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
+                    pol += tr.Text;
+                }
+
+
+                polinom = ClsPolinom.Polinom.PolinomFromString(pol);
+               
+                */
+
+                ClsPolinom.Polinom pol1 = new ClsPolinom.Polinom();
+                ClsPolinom.Polinom pol2 = new ClsPolinom.Polinom();
+
+                pol1 = ClsPolinom.Polinom.PolinomFromString("5x2+2x+5");
+                pol2= ClsPolinom.Polinom.PolinomFromString("4x2+x+1");
+
+                ClsPolinom.Polinom Pol3 = new ClsPolinom.Polinom();
+
+                Pol3 = pol1 - pol2;
 
             }
 

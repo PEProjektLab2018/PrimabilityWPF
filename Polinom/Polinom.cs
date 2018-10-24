@@ -4,11 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace ClsPolinom
 {
-    public class Polinom
+    public class Polinom 
     {
+
+        List<Monom> list = new List<Monom>();
+
+        public List<Monom> List { get => list; }
+
+        public Polinom() { this.list = new List<Monom>(); }
 
         public class Enumerator
         {
@@ -26,14 +33,13 @@ namespace ClsPolinom
             public void Reset() { this.Current = null; }
         }
 
+      //  IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator)GetEnumerator(); }
+
+
         public Enumerator GetEnumerator() { return new Enumerator(); }
     
 
-    List<Monom> list = new List<Monom>();
-
-        public List<Monom> List { get => list; }
-
-        public Polinom() { this.list = new List<Monom>(); }
+    
 
         public Polinom add(Monom monom) {
             Predicate<Monom> predicate = (mon => mon.Variable == monom.Variable && mon.Exponent==monom.Exponent);
@@ -57,19 +63,22 @@ namespace ClsPolinom
             Polinom pol = new Polinom();
             bool added, found;
 
-            foreach (Monom m1 in Polinom1) {
-                added = false;
-                foreach (Monom m2 in Polinom2) {
-                    if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent) {
-                        pol.add(new Monom(m1.Coefficient + m2.Coefficient, m1.Variable, m1.Exponent));
-                        added = true;
-                    }
 
+
+
+                foreach (Monom m1 in Polinom1.List) {
+                    added = false;
+                    foreach (Monom m2 in Polinom2.List) {
+                        if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent) {
+                            pol.add(new Monom(m1.Coefficient + m2.Coefficient, m1.Variable, m1.Exponent));
+                            added = true;
+                        }
+
+                    }
+                    if (added == false) {
+                        pol.add(m1);
+                    }
                 }
-                if (added == false) {
-                    pol.add(m1);
-                }
-            }
 
             foreach (Monom m2 in Polinom2) {
                 found = false;
@@ -93,10 +102,10 @@ namespace ClsPolinom
 
             bool substracted, found;
 
-            foreach (Monom m1 in Polinom1)
+            foreach (Monom m1 in Polinom1.List)
             {
                 substracted = false;
-                foreach (Monom m2 in Polinom2)
+                foreach (Monom m2 in Polinom2.List)
                 {
                     if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent)
                     {
@@ -111,10 +120,10 @@ namespace ClsPolinom
                 }
             }
 
-            foreach (Monom m2 in Polinom2)
+            foreach (Monom m2 in Polinom2.List)
             {
                 found = false;
-                foreach (Monom m1 in Polinom1)
+                foreach (Monom m1 in Polinom1.List)
                 {
                     if (m2.Variable == m1.Variable && m2.Exponent == m1.Exponent)
                     {
@@ -132,9 +141,9 @@ namespace ClsPolinom
 
         public static Polinom operator * (Polinom Polinom1, Polinom Polinom2) {
             Polinom pol=new Polinom();
-            foreach (Monom m1 in Polinom1)
+            foreach (Monom m1 in Polinom1.List)
             {
-                foreach (Monom m2 in Polinom2)
+                foreach (Monom m2 in Polinom2.List)
                 {
                     if (m1.Variable == m2.Variable) {
                         pol.add(new Monom(m1.Coefficient * m2.Coefficient, m1.Variable, m1.Exponent + m2.Exponent));
@@ -149,6 +158,8 @@ namespace ClsPolinom
         {
             throw new NotImplementedException();
         }
+
+
 
         public static Polinom operator % (Polinom Polinom1, Polinom Polinom2)
         {
@@ -189,7 +200,7 @@ namespace ClsPolinom
             Regex regex ;
             Match match;
             Polinom retPolinom = new Polinom();
-            input="x^2+x+1";
+           
             //ulong intResult;
             string[] arrinput = input.Split('-', '+');
             for (int i = 0; i < arrinput.Count(); i++) {
@@ -229,6 +240,7 @@ namespace ClsPolinom
                         }
                     }
                     else {
+                        m.Coefficient = 1;
                         match = regex.Match(arrinput[i]);
                         if (match.Success)
                         {
