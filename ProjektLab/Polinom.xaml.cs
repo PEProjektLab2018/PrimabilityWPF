@@ -102,12 +102,14 @@ namespace ProjektLab
                 ClsPolinom.Polinom pol2 = new ClsPolinom.Polinom();
 
                 pol1 = ClsPolinom.Polinom.PolinomFromString("5x2+2x+5");
-                pol2= ClsPolinom.Polinom.PolinomFromString("4x2+x+1");
+                pol2= ClsPolinom.Polinom.PolinomFromString("8+4x+x2");
 
                 ClsPolinom.Polinom Pol3 = new ClsPolinom.Polinom();
 
                 Pol3 = pol1 * pol2;
 
+                ClsPolinom.Polinom Pol4 = new ClsPolinom.Polinom();
+                Pol4 = ClsPolinom.Polinom.Sorter(pol2);
             }
 
             catch (Exception ex) { }

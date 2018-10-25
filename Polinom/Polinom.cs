@@ -17,6 +17,10 @@ namespace ClsPolinom
 
         public Polinom() { this.list = new List<Monom>(); }
 
+        public Polinom(List<Monom> L) {
+            this.list = L;
+        }
+
         public class Enumerator
         {
             public Monom Current { get; private set; }
@@ -62,9 +66,6 @@ namespace ClsPolinom
         public static Polinom operator + (Polinom Polinom1, Polinom Polinom2) {
             Polinom pol = new Polinom();
             bool added, found;
-
-
-
 
                 foreach (Monom m1 in Polinom1.List) {
                     added = false;
@@ -277,6 +278,14 @@ namespace ClsPolinom
             return retPolinom;
             }
 
-
+        public static Polinom Sorter(Polinom unsorted) {
+            List<Monom> sorted = unsorted.List;
+            sorted.Sort(delegate (Monom m1, Monom m2)
+            {
+                return m2.Exponent.CompareTo(m1.Exponent);
+            });
+            return new Polinom(sorted);
         }
-    }
+        }
+    
+}
