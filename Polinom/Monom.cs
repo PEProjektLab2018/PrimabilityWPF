@@ -21,11 +21,19 @@ namespace ClsPolinom
             this._variable = Variable;
         }
 
+        //one variable polinom
         public Monom(long Coefficient, ulong Exponent)
         {
             this._coefficient = Coefficient;
             this._exponent = Exponent;
             this._variable = "x";
+        }
+
+        //Constant polinom 
+        public Monom(long Coefficient) {
+            this._coefficient = Coefficient;
+            this.Exponent = 0;
+            this.Variable = "";
         }
 
         public long Coefficient { get => _coefficient; set => _coefficient = value; }

@@ -106,7 +106,7 @@ namespace ProjektLab
 
                 ClsPolinom.Polinom Pol3 = new ClsPolinom.Polinom();
 
-                Pol3 = pol1 - pol2;
+                Pol3 = pol1 * pol2;
 
             }
 

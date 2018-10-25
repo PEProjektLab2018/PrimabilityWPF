@@ -147,9 +147,23 @@ namespace ClsPolinom
                 {
                     if (m1.Variable == m2.Variable) {
                         pol.add(new Monom(m1.Coefficient * m2.Coefficient, m1.Variable, m1.Exponent + m2.Exponent));
+                    } else
+
+                    if (m2.Variable == "" && m1.Variable=="")
+                    {
+                        pol.add(new Monom(m1.Coefficient * m2.Coefficient));
+                    } else
+                    //m2 is constant
+                    if (m2.Variable == "") {
+                        pol.add(new Monom(m1.Coefficient * m2.Coefficient, m1.Variable, m1.Exponent));
+                    } else
+                    //m1 is constant
+                    if (m1.Variable == "")
+                    {
+                        pol.add(new Monom(m1.Coefficient * m2.Coefficient, m2.Variable, m2.Exponent));
                     }
                 }
-                
+
             }
             return pol;
         }
