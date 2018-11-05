@@ -59,8 +59,54 @@ namespace ClsPolinom
             return this;
         }
 
-        
+        private static void divider (Polinom Polinom1, Polinom Polinom2, ref Polinom quotient, ref Polinom remainder )
+        {
+            Polinom dividend = new Polinom((Sorter(Polinom1)).List);
+            Polinom divisor = new Polinom(Sorter(Polinom2).List);
+            Polinom tempPolinom;
+           
+            Monom maxDivisor = new Monom();
+            Monom maxDividend = new Monom();
+            Monom quotientMonom;
+            quotient = new Polinom();
+            //divisor's monom with biggest exponent
 
+            while (true)
+            {
+                foreach (Monom m in divisor.List)
+                {
+                    maxDivisor = m;
+                    break;
+                }
+
+                //dividened's monom with biggest exponent
+                foreach (Monom m in dividend.List)
+                {
+                    maxDividend = m;
+                    break;
+                }
+
+                if (maxDivisor.Exponent <= maxDividend.Exponent)
+                {
+
+                    //1. dividing monoms
+                    quotientMonom = new Monom(maxDividend.Coefficient / maxDivisor.Coefficient, maxDividend.Variable, maxDividend.Exponent - maxDivisor.Exponent);
+
+                    tempPolinom = new Polinom();
+                    //2. multiplying back 
+                    foreach (Monom multiple in divisor.List)
+                    {
+
+                        tempPolinom.add(new Monom(multiple.Coefficient * quotientMonom.Coefficient, multiple.Variable, multiple.Exponent + quotientMonom.Exponent));
+                    }
+                    quotient.add(quotientMonom);
+                    //3. substracting multiplied polinom from dividend
+                    dividend = Sorter(dividend - tempPolinom);
+                }
+                else { break; }
+            }
+            remainder = dividend;
+        }
 
 
         public static Polinom operator + (Polinom Polinom1, Polinom Polinom2) {
@@ -173,55 +219,20 @@ namespace ClsPolinom
 
         public static Polinom operator / (Polinom Polinom1, Polinom Polinom2)
         {
-            Polinom dividend = new Polinom((Sorter(Polinom1)).List);
-            Polinom divisor = new Polinom(Sorter(Polinom2).List);
-            Polinom tempPolinom = new Polinom();
-            Monom maxDivisor=new Monom();
-            Monom maxDividend = new Monom();
-            Monom quotient = new Monom();
-            //divisor's monom with biggest exponent
-            
-            while (true) { 
-            foreach (Monom m in divisor.List) {
-                maxDivisor = m;
-                break;
-            }
-
-            //dividened's monom with biggest exponent
-            foreach (Monom m in dividend.List)
-            {
-                maxDividend = m;
-                break;
-            }
-
-                if (maxDivisor.Exponent < maxDividend.Exponent)
-                {
-
-                    //1. divide monoms
-
-                    quotient.Coefficient = maxDividend.Coefficient / maxDivisor.Coefficient;
-                    quotient.Variable = maxDividend.Variable;
-                    quotient.Exponent = maxDividend.Exponent - maxDivisor.Exponent;
-
-                    foreach (Monom multiple in divisor.List)
-                    {
-                        tempPolinom.add(new Monom(multiple.Coefficient * quotient.Coefficient, multiple.Variable, multiple.Exponent + maxDivisor.Exponent));
-                    }
-
-                    dividend = dividend - tempPolinom;
-                }
-                else { break; }
-            }
-            //throw new NotImplementedException();
-            
-            return dividend;
+            Polinom quotient = new Polinom();
+            Polinom remainder=new Polinom();
+            divider(Polinom1, Polinom2, ref quotient, ref remainder);
+            return quotient;
         }
 
 
 
         public static Polinom operator % (Polinom Polinom1, Polinom Polinom2)
         {
-            throw new NotImplementedException();
+            Polinom quotient = new Polinom();
+            Polinom remainder = new Polinom();
+            divider(Polinom1, Polinom2, ref quotient, ref remainder);
+            return remainder;
         }
 
         public static Polinom[] getIrreducible(int ElementNumber, int power, int modulo) {
@@ -230,11 +241,20 @@ namespace ClsPolinom
 
         }
 
+
         public static Polinom calcPolinomToZp(Polinom input, int p) {
             Polinom retPolinom = new Polinom();
 
             foreach (Monom m in input.List) {
-                retPolinom.add(new Monom(m.Coefficient % p,m.Variable, m.Exponent));
+                if (m.Coefficient > 0)
+                {
+                    retPolinom.add(new Monom(m.Coefficient % p, m.Variable, m.Exponent));
+                }
+                else {
+
+                    retPolinom.add(new Monom((m.Coefficient % p)+p, m.Variable, m.Exponent));
+                }
+
             }
 
             return retPolinom;
@@ -247,14 +267,15 @@ namespace ClsPolinom
             string ret = "";
             int i = 0;
             foreach (Monom m in list) {
-               
+
                 if (m.Coefficient != 0)
                 {
                     if (i > 0 && m.Coefficient > 0) { ret += "+"; }
                     if (m.Exponent == 0) { ret += m.Coefficient; }
                     else
                     {
-                        ret += m.Coefficient;
+                        if (m.Coefficient > 1 || m.Coefficient < -1) { ret += m.Coefficient; }
+                        if (m.Coefficient == -1) { ret += "-"; }
                         if (m.Exponent == 1)
                         {
                             ret += m.Variable;
