@@ -102,7 +102,7 @@ namespace ProjektLab
                 ClsPolinom.Polinom pol2 = new ClsPolinom.Polinom();
 
                 pol1 = ClsPolinom.Polinom.PolinomFromString("5x2+2x+5");
-                pol2= ClsPolinom.Polinom.PolinomFromString("8+4x+x2");
+                pol2= ClsPolinom.Polinom.PolinomFromString("x+1");
 
                 ClsPolinom.Polinom Pol3 = new ClsPolinom.Polinom();
 
@@ -110,6 +110,16 @@ namespace ProjektLab
 
                 ClsPolinom.Polinom Pol4 = new ClsPolinom.Polinom();
                 Pol4 = ClsPolinom.Polinom.Sorter(pol2);
+                ClsPolinom.Polinom Pol5 = new ClsPolinom.Polinom();
+
+                Pol5 = pol1/ pol2;
+
+                ClsPolinom.Polinom Pol6 = new ClsPolinom.Polinom();
+                ClsPolinom.Polinom Pol7 = new ClsPolinom.Polinom();
+
+                Pol6 = ClsPolinom.Polinom.PolinomFromString("19x2+27x+8");
+                Pol7 = ClsPolinom.Polinom.calcPolinomToZp(Pol6, 7);
+                string s = Pol7.ToString();
             }
 
             catch (Exception ex) { }

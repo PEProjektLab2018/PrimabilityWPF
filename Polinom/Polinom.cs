@@ -110,7 +110,9 @@ namespace ClsPolinom
                 {
                     if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent)
                     {
-                        pol.add(new Monom(m1.Coefficient - m2.Coefficient, m1.Variable, m1.Exponent));
+                        if (m1.Coefficient != m2.Coefficient) { 
+                            pol.add(new Monom(m1.Coefficient - m2.Coefficient, m1.Variable, m1.Exponent));
+                        }
                         substracted = true;
                     }
 
@@ -171,7 +173,48 @@ namespace ClsPolinom
 
         public static Polinom operator / (Polinom Polinom1, Polinom Polinom2)
         {
-            throw new NotImplementedException();
+            Polinom dividend = new Polinom((Sorter(Polinom1)).List);
+            Polinom divisor = new Polinom(Sorter(Polinom2).List);
+            Polinom tempPolinom = new Polinom();
+            Monom maxDivisor=new Monom();
+            Monom maxDividend = new Monom();
+            Monom quotient = new Monom();
+            //divisor's monom with biggest exponent
+            
+            while (true) { 
+            foreach (Monom m in divisor.List) {
+                maxDivisor = m;
+                break;
+            }
+
+            //dividened's monom with biggest exponent
+            foreach (Monom m in dividend.List)
+            {
+                maxDividend = m;
+                break;
+            }
+
+                if (maxDivisor.Exponent < maxDividend.Exponent)
+                {
+
+                    //1. divide monoms
+
+                    quotient.Coefficient = maxDividend.Coefficient / maxDivisor.Coefficient;
+                    quotient.Variable = maxDividend.Variable;
+                    quotient.Exponent = maxDividend.Exponent - maxDivisor.Exponent;
+
+                    foreach (Monom multiple in divisor.List)
+                    {
+                        tempPolinom.add(new Monom(multiple.Coefficient * quotient.Coefficient, multiple.Variable, multiple.Exponent + maxDivisor.Exponent));
+                    }
+
+                    dividend = dividend - tempPolinom;
+                }
+                else { break; }
+            }
+            //throw new NotImplementedException();
+            
+            return dividend;
         }
 
 
@@ -181,31 +224,53 @@ namespace ClsPolinom
             throw new NotImplementedException();
         }
 
-        public static Polinom[] getIrreducible(int ElementNumber, int power) {
+        public static Polinom[] getIrreducible(int ElementNumber, int power, int modulo) {
 
             throw new NotImplementedException();
 
         }
 
+        public static Polinom calcPolinomToZp(Polinom input, int p) {
+            Polinom retPolinom = new Polinom();
+
+            foreach (Monom m in input.List) {
+                retPolinom.add(new Monom(m.Coefficient % p,m.Variable, m.Exponent));
+            }
+
+            return retPolinom;
+        }
+
+
         public override string ToString()
         {
             //return base.ToString();
             string ret = "";
-
+            int i = 0;
             foreach (Monom m in list) {
-
-                if (m.Coefficient > 1 || (m.Coefficient==1 && m.Exponent==0)) { ret += m.Coefficient; }
-                if (m.Exponent != 0) {
-                    if (m.Exponent == 1)
+               
+                if (m.Coefficient != 0)
+                {
+                    if (i > 0 && m.Coefficient > 0) { ret += "+"; }
+                    if (m.Exponent == 0) { ret += m.Coefficient; }
+                    else
                     {
-                        ret += m.Variable;
+                        ret += m.Coefficient;
+                        if (m.Exponent == 1)
+                        {
+                            ret += m.Variable;
+                        }
+                        else
+                        {
+                            ret += m.Variable + "^" + m.Exponent;
+                        }
+
                     }
-                    else {
-                        ret += m.Variable+"^"+m.Exponent;
-                    }
+
 
                 }
-                ret += " + ";
+               
+                i++;
+                
             }
             return ret.TrimEnd(new Char[] { ' ', '+' });
         }
@@ -267,7 +332,7 @@ namespace ClsPolinom
                 }
                 else {
                     m.Coefficient = Convert.ToInt64(arrinput[i]);
-                    m.Variable = "";
+                    m.Variable = "x";
                     m.Exponent = 0;
 
                 }
@@ -287,5 +352,17 @@ namespace ClsPolinom
             return new Polinom(sorted);
         }
         }
-    
+    /*
+
+    private static Monom MaxMonom(Polinom pol) {
+        Monom retMonom=new Monom();
+        if (pol.List.Count>0) { 
+        foreach (Monom m in pol.List) {
+                retMonom = m;
+                break;
+        }
+        }
+        return retMonom;
+    }
+    */
 }

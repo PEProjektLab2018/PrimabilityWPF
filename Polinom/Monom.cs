@@ -33,7 +33,7 @@ namespace ClsPolinom
         public Monom(long Coefficient) {
             this._coefficient = Coefficient;
             this.Exponent = 0;
-            this.Variable = "";
+            this.Variable = "x";
         }
 
         public long Coefficient { get => _coefficient; set => _coefficient = value; }
