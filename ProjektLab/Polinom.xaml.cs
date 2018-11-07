@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -120,6 +121,14 @@ namespace ProjektLab
                 Pol6 = ClsPolinom.Polinom.PolinomFromString("19x2+27x+8");
                 Pol7 = ClsPolinom.Polinom.calcPolinomToZp(Pol6, 7);
                 string s = Pol7.ToString();
+
+                List<ClsPolinom.Polinom> irreducible=new List<ClsPolinom.Polinom>();
+                irreducible = ClsPolinom.Polinom.getIrreducible(1, 2);
+               irreducible = ClsPolinom.Polinom.getIrreducible(1, 3);
+                irreducible = ClsPolinom.Polinom.getIrreducible(2, 3);
+
+
+
             }
 
             catch (Exception ex) { }

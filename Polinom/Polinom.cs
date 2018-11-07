@@ -235,9 +235,68 @@ namespace ClsPolinom
             return remainder;
         }
 
-        public static Polinom[] getIrreducible(int ElementNumber, int power, int modulo) {
+        public static List<Polinom> getIrreducible(int power, int p) {
+            List<Polinom> IrreduciblePolinoms = new List<Polinom>();
+            List<Polinom> tempPolinoms;
 
-            throw new NotImplementedException();
+            for (int pow = 1; pow <= power; pow++)
+            {
+                tempPolinoms = new List<Polinom>();
+                tempPolinoms = GeneratePolinoms(power, p);
+                if (pow == 1)
+                {
+                    IrreduciblePolinoms = tempPolinoms;
+                }
+                else
+                {
+
+                }
+
+            }
+
+            return IrreduciblePolinoms;
+
+        }
+
+
+        public static List<Polinom> GeneratePolinoms(int power, int p) {
+            List<Polinom> Polinoms=new List<Polinom>();
+         
+            int calcValue = (int)Math.Pow(p, power);
+            int tempValue;
+            List<Monom> Monoms;
+            //Generate Coefficient Matrix
+
+            int[,] coefMatrix = new int[(int)Math.Pow(p, power) *(p-1), (power + 1)];
+            for (int row = 0; row< (int)Math.Pow(p, power) * (p - 1); row++) {
+                tempValue = calcValue;
+                for (int column = power; column >= 0; column--)
+                {
+                    if (column > 0)
+                    {
+                        coefMatrix[row, column] = tempValue / ((int)Math.Pow(p, column));
+                    }
+                    else {coefMatrix[row, column] = tempValue;
+                }
+                    tempValue = tempValue - (coefMatrix[row, column] * ((int)Math.Pow(p, column)));
+                }
+                calcValue++;
+              
+            }
+
+            //Generate polinoms using Coewfficient Matrix
+
+            for (int row = 0; row < (int)Math.Pow(p, power) * (p - 1); row++)
+            {
+                Monoms = new List<Monom>();
+                for (int column = power; column >= 0; column--) {
+                    Monoms.Add(new Monom(coefMatrix[row, column], "x", (ulong)column));
+                }
+                Polinoms.Add(new Polinom(Monoms));
+            }
+            return Polinoms;
+            
+            //throw new NotImplementedException();
 
         }
 
