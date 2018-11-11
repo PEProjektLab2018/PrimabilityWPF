@@ -98,7 +98,7 @@ namespace ProjektLab
                 polinom = ClsPolinom.Polinom.PolinomFromString(pol);
                
                 */
-
+                /*
                 ClsPolinom.Polinom pol1 = new ClsPolinom.Polinom();
                 ClsPolinom.Polinom pol2 = new ClsPolinom.Polinom();
 
@@ -121,11 +121,19 @@ namespace ProjektLab
                 Pol6 = ClsPolinom.Polinom.PolinomFromString("19x2+27x+8");
                 Pol7 = ClsPolinom.Polinom.calcPolinomToZp(Pol6, 7);
                 string s = Pol7.ToString();
-
+                */
+                
                 List<ClsPolinom.Polinom> irreducible=new List<ClsPolinom.Polinom>();
-                irreducible = ClsPolinom.Polinom.getIrreducible(1, 2);
-               irreducible = ClsPolinom.Polinom.getIrreducible(1, 3);
-                irreducible = ClsPolinom.Polinom.getIrreducible(2, 3);
+                //irreducible = ClsPolinom.Polinom.getIrreducible(1, 2);
+               //irreducible = ClsPolinom.Polinom.getIrreducible(1, 3);
+                //irreducible = ClsPolinom.Polinom.getIrreducible(4, 2);
+                irreducible = ClsPolinom.Polinom.getIrreducible(4, 3);
+
+                //ClsPolinom.Polinom pol8 = new ClsPolinom.Polinom();
+                //pol8 = ClsPolinom.Polinom.Pow(ClsPolinom.Polinom.PolinomFromString("x+1"), 0);
+                //ClsPolinom.Polinom pol9 = new ClsPolinom.Polinom();
+                //pol9 = ClsPolinom.Polinom.Pow(ClsPolinom.Polinom.PolinomFromString("x+1"), 1);
+
 
 
 

@@ -108,7 +108,7 @@ namespace ClsPolinom
             remainder = dividend;
         }
 
-
+   
         public static Polinom operator + (Polinom Polinom1, Polinom Polinom2) {
             Polinom pol = new Polinom();
             bool added, found;
@@ -225,8 +225,6 @@ namespace ClsPolinom
             return quotient;
         }
 
-
-
         public static Polinom operator % (Polinom Polinom1, Polinom Polinom2)
         {
             Polinom quotient = new Polinom();
@@ -235,25 +233,106 @@ namespace ClsPolinom
             return remainder;
         }
 
+        private static int biggestPower(Polinom polinom) {
+            polinom = Sorter(polinom);
+            int exponent=0;
+            foreach (Monom m in polinom.list) {
+                exponent = (int)m.Exponent;
+                break;
+            }
+            return exponent;
+        }
+        
+        public static Polinom Pow(Polinom polinom, int power) {
+            Polinom retPolinom=new Polinom();
+            retPolinom.add(new Monom(1));
+         
+                for (int i = 1; i <= power; i++) {
+                    retPolinom = retPolinom * polinom;
+                }
+   
+            return retPolinom;
+        }
+        
+
+
         public static List<Polinom> getIrreducible(int power, int p) {
             List<Polinom> IrreduciblePolinoms = new List<Polinom>();
-            List<Polinom> tempPolinoms;
+            List<Polinom> testPolinoms = new List<Polinom>(); ;
+            List<Polinom> multiplyPolinoms = new List<Polinom>(); ;
+            List<Polinom> candidatePolinoms;
+            Polinom PoweredPolinom = new Polinom();
+            bool isIrreducible;
 
             for (int pow = 1; pow <= power; pow++)
             {
-                tempPolinoms = new List<Polinom>();
-                tempPolinoms = GeneratePolinoms(power, p);
+                candidatePolinoms = new List<Polinom>();
+                candidatePolinoms = GeneratePolinoms(pow, p);
                 if (pow == 1)
                 {
-                    IrreduciblePolinoms = tempPolinoms;
+                    foreach (Polinom pol in candidatePolinoms)
+                    {
+                        if (MaxMonom(pol).Coefficient == 1) { 
+                        IrreduciblePolinoms.Add(pol);
+                        testPolinoms.Add(pol);
+                        }
+                    }
                 }
                 else
                 {
+                    // testPolinoms = new List<Polinom>();
+                    foreach (Polinom poli in IrreduciblePolinoms)
+                    {
+                        for (int i=1; i<=pow; i++) {
+                            if (biggestPower(calcPolinomToZp(Pow(poli, i), p))<= pow){ 
+                            testPolinoms.Add(calcPolinomToZp(Pow(poli, i), p));
+            }
+        }
+                    }
+
+                    
+                    for (int start = 0; start < testPolinoms.Count - 1; start++)
+                    {
+                        for (int end = start + 1; end < testPolinoms.Count; end++)
+                        {
+                            if(biggestPower(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p)) <= pow) { 
+
+                            multiplyPolinoms.Add(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p));
+                            }
+                        }
+
+                    }
+
+                    foreach (Polinom m in multiplyPolinoms) {
+                        if (biggestPower(m)<=pow) { 
+                        testPolinoms.Add(m);
+                        }
+                    }
+
+                    foreach (Polinom candidate in candidatePolinoms)
+                    {
+                        isIrreducible = true;
+
+
+
+                        foreach (Polinom tp in testPolinoms)
+                        {
+                            if (candidate.ToString() == tp.ToString())
+                            {
+                                isIrreducible = false;
+                                break;
+                            }
+                        }
+                        if (isIrreducible == true)
+                        {
+                                IrreduciblePolinoms.Add(candidate);
+                            testPolinoms.Add(candidate);
+                        }
+                        
+                    }
 
                 }
-
             }
-
             return IrreduciblePolinoms;
 
         }
@@ -265,6 +344,7 @@ namespace ClsPolinom
             int calcValue = (int)Math.Pow(p, power);
             int tempValue;
             List<Monom> Monoms;
+            Polinom Pol;
             //Generate Coefficient Matrix
 
             int[,] coefMatrix = new int[(int)Math.Pow(p, power) *(p-1), (power + 1)];
@@ -284,15 +364,17 @@ namespace ClsPolinom
               
             }
 
-            //Generate polinoms using Coewfficient Matrix
+            //Generate polinoms using Coefficient Matrix
 
             for (int row = 0; row < (int)Math.Pow(p, power) * (p - 1); row++)
             {
                 Monoms = new List<Monom>();
                 for (int column = power; column >= 0; column--) {
+
                     Monoms.Add(new Monom(coefMatrix[row, column], "x", (ulong)column));
                 }
-                Polinoms.Add(new Polinom(Monoms));
+                Pol=new Polinom(Monoms);
+                if (MaxMonom(Pol).Coefficient == 1) { Polinoms.Add(Pol); }
             }
             return Polinoms;
             
@@ -309,7 +391,7 @@ namespace ClsPolinom
                 {
                     retPolinom.add(new Monom(m.Coefficient % p, m.Variable, m.Exponent));
                 }
-                else {
+                else if (m.Coefficient<0){
 
                     retPolinom.add(new Monom((m.Coefficient % p)+p, m.Variable, m.Exponent));
                 }
@@ -431,18 +513,24 @@ namespace ClsPolinom
             });
             return new Polinom(sorted);
         }
-        }
-    /*
 
-    private static Monom MaxMonom(Polinom pol) {
-        Monom retMonom=new Monom();
-        if (pol.List.Count>0) { 
-        foreach (Monom m in pol.List) {
-                retMonom = m;
-                break;
+        private static Monom MaxMonom(Polinom pol)
+        {
+            pol = Sorter(pol);
+            Monom retMonom = new Monom();
+            if (pol.List.Count > 0)
+            {
+                foreach (Monom m in pol.List)
+                {
+                    retMonom = m;
+                    break;
+                }
+            }
+            return retMonom;
         }
-        }
-        return retMonom;
     }
-    */
+    
+
+    
+    
 }
