@@ -43,7 +43,7 @@ namespace Prime
                 return false;
             }
 
-            Dictionary<ulong, bool>Sieve = MakeSieveErastothenes(number);
+            Dictionary<ulong, bool> Sieve = MakeSieveErastothenes(number);
             return Sieve.ContainsKey(number) && Sieve[number];
         }
 
@@ -54,7 +54,7 @@ namespace Prime
         {
             Dictionary<ulong, bool> IsPrime = new Dictionary<ulong, bool>();
 
-            for (ulong i = 3; i <= maximum; i+=2)
+            for (ulong i = 3; i <= maximum; i += 2)
             {
                 IsPrime[i] = true;
             }
@@ -83,8 +83,8 @@ namespace Prime
          */
         public static bool Wilson(ulong number)
         {
-            return 
-                number > 1 && 
+            return
+                number > 1 &&
                 number % (Factorial(number - 1) + 1) == 0;
 
         }
@@ -146,7 +146,7 @@ namespace Prime
             }
             for (ulong i = 0; i < Chance; i++)
             {
-                ulong a = generateRandomNumber(number-1, 1);
+                ulong a = generateRandomNumber(number - 1, 1);
                 // Fermat theorem
                 //if ((a ^ (number - 1) % number) != 1)
 
@@ -157,7 +157,7 @@ namespace Prime
                 }
 
                 if (result != 1) { return false; }
-                
+
             }
 
             return true;
@@ -199,7 +199,7 @@ namespace Prime
                 if (a % 4 == 3 && n % 4 == 3) { j = -j; }
                 a = a % n;
             }
-            return n == 1 ? (ulong) j : 0;
+            return n == 1 ? (ulong)j : 0;
         }
 
         //Solovay–Strassen
@@ -231,7 +231,7 @@ namespace Prime
             }
 
             ulong s = number - 1;
-            while (s % 2 == 0)  s >>= 1;
+            while (s % 2 == 0) s >>= 1;
 
             for (int i = 0; i > 100; i++)
             {
@@ -252,9 +252,12 @@ namespace Prime
                 {
                     return false;
                 }
-                
+
             }
             return true;
         }
+
+
     }
+
 }

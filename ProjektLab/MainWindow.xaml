@@ -12,7 +12,16 @@
                 <local:Prime></local:Prime>
             </TabItem>
             <TabItem Header="Polinom" Name="tiPolinom">
-                <local:Polinom></local:Polinom>
+                <local:Polinom Margin="0,-5,0,2" RenderTransformOrigin="0.5,0.5">
+                    <local:Polinom.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="-0.145"/>
+                            <RotateTransform/>
+                            <TranslateTransform X="0.497"/>
+                        </TransformGroup>
+                    </local:Polinom.RenderTransform>
+                </local:Polinom>
             </TabItem>
         </TabControl>
 
