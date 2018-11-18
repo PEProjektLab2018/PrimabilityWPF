@@ -152,5 +152,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="clipboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="open-archive.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using ClsPolinom;
-
+using Microsoft.Win32;
 
 namespace ProjektLab
 {
@@ -16,8 +17,31 @@ namespace ProjektLab
         public Polinom()
         {
             InitializeComponent();
-           // DataContext = this;
+            this.KeyDown += new KeyEventHandler(Polinom_KeyDown);
+            // DataContext = this;
         }
+
+      
+
+        void Polinom_KeyDown(object sender, KeyEventArgs e)
+        {
+            
+            string number = "";
+            if ((e.Key >= Key.D0 && e.Key <= Key.D9))
+            {
+                
+                number = e.Key.ToString().Substring(1); 
+            }
+            else if (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+            {
+                number = e.Key.ToString().Substring(6); 
+            }
+
+            tbkPolinom.Inlines.Add(new Run(number));
+
+
+        }
+
 
         private void btn_Click(object sender, RoutedEventArgs e)
         {
@@ -30,7 +54,7 @@ namespace ProjektLab
 
         private void Button_Click(object sender, RoutedEventArgs e) { }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Click_square(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -54,8 +78,24 @@ namespace ProjektLab
 
         }
 
-        
-        
+        private void Button_Click_Cube(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                
+
+                tbkPolinom.Text += "x";
+                Run run = new Run();
+                run.Text = "3";
+                run.BaselineAlignment = BaselineAlignment.Superscript;
+                tbkPolinom.Inlines.Add(run);
+            }
+            catch (Exception ex) { }
+
+
+
+        }
+
 
         private void btnPol_Click(object sender, RoutedEventArgs e)
         {
@@ -78,7 +118,60 @@ namespace ProjektLab
         }
             catch (Exception ex) { }
         }
-        private void equal_Click(object sender, RoutedEventArgs e)
+
+        private void btnclipBoard_Click(object sender, RoutedEventArgs e) {
+            ClsPolinom.Polinom polinom=new ClsPolinom.Polinom();
+            polinom= ClsPolinom.Polinom.PolinomFromString(Clipboard.GetText());
+            polinom = ClsPolinom.Polinom.Sorter(polinom);
+        }
+
+        private void btnOpen_Click(object sender, RoutedEventArgs e)
+        {
+            ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text Files (*.txt) | *.txt";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                polinom = ClsPolinom.Polinom.PolinomFromString(System.IO.File.ReadAllText(openFileDialog.FileName));
+                displayPolinom(polinom);
+
+            }
+       }
+
+        private void displayPolinom(ClsPolinom.Polinom polinom)
+        {
+            tbkPolinom.Text = "";
+            int i = 0;
+            foreach (Monom m in polinom.List)
+            {
+                if (i > 0 && m.Coefficient > 1) { tbkPolinom.Inlines.Add("+"); }
+                if (m.Coefficient > 1)
+                {
+                    //tbkPolinom.Text += m.Coefficient;
+                    tbkPolinom.Inlines.Add(m.Coefficient.ToString());
+                }
+                if (m.Exponent != 0)
+                {
+                    //tbkPolinom.Text += m.Variable;
+                    tbkPolinom.Inlines.Add(m.Variable);
+                    if (m.Exponent > 1)
+                    {
+                        Run run = new Run();
+                        run.Text = m.Exponent.ToString();
+                        run.BaselineAlignment = BaselineAlignment.Superscript;
+                        tbkPolinom.Inlines.Add(run);
+
+                    }
+                }
+                i++;
+            }
+
+
+    }
+
+
+
+            private void equal_Click(object sender, RoutedEventArgs e)
         {
             
             try

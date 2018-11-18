@@ -483,6 +483,7 @@ namespace ClsPolinom
                     }
                     else {
                         m.Coefficient = 1;
+                        // get exponent
                         match = regex.Match(arrinput[i]);
                         if (match.Success)
                         {
