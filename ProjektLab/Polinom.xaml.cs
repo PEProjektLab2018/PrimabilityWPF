@@ -21,6 +21,10 @@ namespace ProjektLab
             // DataContext = this;
         }
 
+        void btnMod_click(object sender, RoutedEventArgs e) {
+            tbkMod.Text = tbkPolinom.Text;
+
+        }
       
 
         void Polinom_KeyDown(object sender, KeyEventArgs e)
@@ -29,12 +33,29 @@ namespace ProjektLab
             string number = "";
             if ((e.Key >= Key.D0 && e.Key <= Key.D9))
             {
-                
-                number = e.Key.ToString().Substring(1); 
+
+                number = e.Key.ToString().Substring(1);
             }
             else if (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
             {
-                number = e.Key.ToString().Substring(6); 
+                number = e.Key.ToString().Substring(6);
+            }
+            else if (e.Key==Key.Add) {
+                number = "+";
+            }
+
+            else if (e.Key == Key.Subtract)
+            {
+                number = "-";
+            }
+            else if (e.Key == Key.Multiply)
+            {
+                number = "*";
+            }
+
+            else if (e.Key == Key.Divide)
+            {
+                number = "/";
             }
 
             tbkPolinom.Inlines.Add(new Run(number));
@@ -101,7 +122,7 @@ namespace ProjektLab
         {
             try {
 
-                if (btnPol.Content.ToString() == "Polinom") {
+             //   if (btnPol.Content.ToString() == "Polinom") {
                     btnPol.Content = "Művelet";
                     foreach (Inline il in tbkPolinom.Inlines) {
                         Run run = new Run();
@@ -113,7 +134,7 @@ namespace ProjektLab
                     }
                 
  
-                }
+          //      }
             
         }
             catch (Exception ex) { }

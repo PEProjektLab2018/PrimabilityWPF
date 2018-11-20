@@ -20,6 +20,9 @@ namespace ClsPolinom
         public Polinom(List<Monom> L) {
             this.list = L;
         }
+        public Polinom(Polinom P) {
+            this.list = P.list;
+        }
 
         public class Enumerator
         {
@@ -442,7 +445,7 @@ namespace ClsPolinom
             Regex regex ;
             Match match;
             Polinom retPolinom = new Polinom();
-           
+          
             //ulong intResult;
             string[] arrinput = input.Split('-', '+');
             for (int i = 0; i < arrinput.Count(); i++) {
