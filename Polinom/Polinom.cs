@@ -8,16 +8,20 @@ using System.Collections;
 
 namespace ClsPolinom
 {
-    public class Polinom
+    public class Polinom 
     {
 
-        public List<Monom> List { get; } = new List<Monom>();
+        List<Monom> list = new List<Monom>();
 
-        public Polinom() { this.List = new List<Monom>(); }
+        public List<Monom> List { get => list; }
 
-        public Polinom(List<Monom> L)
-        {
-            this.List = L;
+        public Polinom() { this.list = new List<Monom>(); }
+
+        public Polinom(List<Monom> L) {
+            this.list = L;
+        }
+        public Polinom(Polinom P) {
+            this.list = P.list;
         }
 
         public class Enumerator
@@ -36,36 +40,34 @@ namespace ClsPolinom
             public void Reset() { this.Current = null; }
         }
 
-        //  IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator)GetEnumerator(); }
+      //  IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator)GetEnumerator(); }
 
 
         public Enumerator GetEnumerator() { return new Enumerator(); }
+    
 
+    
 
-
-
-        public Polinom add(Monom monom)
-        {
-            Predicate<Monom> predicate = (mon => mon.Variable == monom.Variable && mon.Exponent == monom.Exponent);
-            if (this.List.Exists(predicate))
+        public Polinom add(Monom monom) {
+            Predicate<Monom> predicate = (mon => mon.Variable == monom.Variable && mon.Exponent==monom.Exponent);
+            if (this.list.Exists(predicate))
             {
-                Monom m = this.List.Find(predicate);
+                Monom m = this.list.Find(predicate);
                 m.Coefficient += monom.Coefficient;
             }
-            else
-            {
-                this.List.Add(monom);
+            else {
+                this.list.Add(monom);
 
             }
             return this;
         }
 
-        private static void divider(Polinom Polinom1, Polinom Polinom2, ref Polinom quotient, ref Polinom remainder)
+        private static void divider (Polinom Polinom1, Polinom Polinom2, ref Polinom quotient, ref Polinom remainder )
         {
             Polinom dividend = new Polinom((Sorter(Polinom1)).List);
             Polinom divisor = new Polinom(Sorter(Polinom2).List);
             Polinom tempPolinom;
-
+           
             Monom maxDivisor = new Monom();
             Monom maxDividend = new Monom();
             Monom quotientMonom;
@@ -109,54 +111,44 @@ namespace ClsPolinom
             remainder = dividend;
         }
 
-
-        public static Polinom operator +(Polinom Polinom1, Polinom Polinom2)
-        {
+   
+        public static Polinom operator + (Polinom Polinom1, Polinom Polinom2) {
             Polinom pol = new Polinom();
             bool added, found;
 
-            foreach (Monom m1 in Polinom1.List)
-            {
-                added = false;
-                foreach (Monom m2 in Polinom2.List)
-                {
-                    if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent)
-                    {
-                        pol.add(new Monom(m1.Coefficient + m2.Coefficient, m1.Variable, m1.Exponent));
-                        added = true;
+                foreach (Monom m1 in Polinom1.List) {
+                    added = false;
+                    foreach (Monom m2 in Polinom2.List) {
+                        if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent) {
+                            pol.add(new Monom(m1.Coefficient + m2.Coefficient, m1.Variable, m1.Exponent));
+                            added = true;
+                        }
+
                     }
-
+                    if (added == false) {
+                        pol.add(m1);
+                    }
                 }
-                if (added == false)
-                {
-                    pol.add(m1);
-                }
-            }
 
-            foreach (Monom m2 in Polinom2)
-            {
+            foreach (Monom m2 in Polinom2) {
                 found = false;
-                foreach (Monom m1 in Polinom1)
-                {
-                    if (m2.Variable == m1.Variable && m2.Exponent == m1.Exponent)
-                    {
+                foreach (Monom m1 in Polinom1) {
+                    if (m2.Variable == m1.Variable && m2.Exponent == m1.Exponent) {
                         found = true;
                     }
                 }
-                if (found == false)
-                {
+                if (found == false) {
                     pol.add(m2);
                 }
 
             }
 
-
+            
             return pol;
         }
 
-        public static Polinom operator -(Polinom Polinom1, Polinom Polinom2)
-        {
-            Polinom pol = new Polinom();
+        public static Polinom operator - (Polinom Polinom1, Polinom Polinom2) {
+            Polinom pol=new Polinom();
 
             bool substracted, found;
 
@@ -167,8 +159,7 @@ namespace ClsPolinom
                 {
                     if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent)
                     {
-                        if (m1.Coefficient != m2.Coefficient)
-                        {
+                        if (m1.Coefficient != m2.Coefficient) { 
                             pol.add(new Monom(m1.Coefficient - m2.Coefficient, m1.Variable, m1.Exponent));
                         }
                         substracted = true;
@@ -193,37 +184,31 @@ namespace ClsPolinom
                 }
                 if (found == false)
                 {
-                    pol.add(new Monom((m2.Coefficient) * (-1), m2.Variable, m2.Exponent));
+                    pol.add(new Monom((m2.Coefficient)*(-1),m2.Variable,m2.Exponent));
                 }
 
             }
             return pol;
         }
 
-        public static Polinom operator *(Polinom Polinom1, Polinom Polinom2)
-        {
-            Polinom pol = new Polinom();
+        public static Polinom operator * (Polinom Polinom1, Polinom Polinom2) {
+            Polinom pol=new Polinom();
             foreach (Monom m1 in Polinom1.List)
             {
                 foreach (Monom m2 in Polinom2.List)
                 {
-                    if (m1.Variable == m2.Variable)
-                    {
+                    if (m1.Variable == m2.Variable) {
                         pol.add(new Monom(m1.Coefficient * m2.Coefficient, m1.Variable, m1.Exponent + m2.Exponent));
-                    }
-                    else
+                    } else
 
-                    if (m2.Variable == "" && m1.Variable == "")
+                    if (m2.Variable == "" && m1.Variable=="")
                     {
                         pol.add(new Monom(m1.Coefficient * m2.Coefficient));
-                    }
-                    else
+                    } else
                     //m2 is constant
-                    if (m2.Variable == "")
-                    {
+                    if (m2.Variable == "") {
                         pol.add(new Monom(m1.Coefficient * m2.Coefficient, m1.Variable, m1.Exponent));
-                    }
-                    else
+                    } else
                     //m1 is constant
                     if (m1.Variable == "")
                     {
@@ -235,15 +220,15 @@ namespace ClsPolinom
             return pol;
         }
 
-        public static Polinom operator /(Polinom Polinom1, Polinom Polinom2)
+        public static Polinom operator / (Polinom Polinom1, Polinom Polinom2)
         {
             Polinom quotient = new Polinom();
-            Polinom remainder = new Polinom();
+            Polinom remainder=new Polinom();
             divider(Polinom1, Polinom2, ref quotient, ref remainder);
             return quotient;
         }
 
-        public static Polinom operator %(Polinom Polinom1, Polinom Polinom2)
+        public static Polinom operator % (Polinom Polinom1, Polinom Polinom2)
         {
             Polinom quotient = new Polinom();
             Polinom remainder = new Polinom();
@@ -251,35 +236,30 @@ namespace ClsPolinom
             return remainder;
         }
 
-        private static int biggestPower(Polinom polinom)
-        {
+        private static int biggestPower(Polinom polinom) {
             polinom = Sorter(polinom);
-            int exponent = 0;
-            foreach (Monom m in polinom.List)
-            {
+            int exponent=0;
+            foreach (Monom m in polinom.list) {
                 exponent = (int)m.Exponent;
                 break;
             }
             return exponent;
         }
-
-        public static Polinom Pow(Polinom polinom, int power)
-        {
-            Polinom retPolinom = new Polinom();
+        
+        public static Polinom Pow(Polinom polinom, int power) {
+            Polinom retPolinom=new Polinom();
             retPolinom.add(new Monom(1));
-
-            for (int i = 1; i <= power; i++)
-            {
-                retPolinom = retPolinom * polinom;
-            }
-
+         
+                for (int i = 1; i <= power; i++) {
+                    retPolinom = retPolinom * polinom;
+                }
+   
             return retPolinom;
         }
+        
 
 
-
-        public static List<Polinom> getIrreducible(int power, int p)
-        {
+        public static List<Polinom> getIrreducible(int power, int p) {
             List<Polinom> IrreduciblePolinoms = new List<Polinom>();
             List<Polinom> testPolinoms = new List<Polinom>(); ;
             List<Polinom> multiplyPolinoms = new List<Polinom>(); ;
@@ -295,10 +275,9 @@ namespace ClsPolinom
                 {
                     foreach (Polinom pol in candidatePolinoms)
                     {
-                        if (MaxMonom(pol).Coefficient == 1)
-                        {
-                            IrreduciblePolinoms.Add(pol);
-                            testPolinoms.Add(pol);
+                        if (MaxMonom(pol).Coefficient == 1) { 
+                        IrreduciblePolinoms.Add(pol);
+                        testPolinoms.Add(pol);
                         }
                     }
                 }
@@ -307,34 +286,29 @@ namespace ClsPolinom
                     // testPolinoms = new List<Polinom>();
                     foreach (Polinom poli in IrreduciblePolinoms)
                     {
-                        for (int i = 1; i <= pow; i++)
-                        {
-                            if (biggestPower(calcPolinomToZp(Pow(poli, i), p)) <= pow)
-                            {
-                                testPolinoms.Add(calcPolinomToZp(Pow(poli, i), p));
-                            }
-                        }
+                        for (int i=1; i<=pow; i++) {
+                            if (biggestPower(calcPolinomToZp(Pow(poli, i), p))<= pow){ 
+                            testPolinoms.Add(calcPolinomToZp(Pow(poli, i), p));
+            }
+        }
                     }
 
-
+                    
                     for (int start = 0; start < testPolinoms.Count - 1; start++)
                     {
                         for (int end = start + 1; end < testPolinoms.Count; end++)
                         {
-                            if (biggestPower(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p)) <= pow)
-                            {
+                            if(biggestPower(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p)) <= pow) { 
 
-                                multiplyPolinoms.Add(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p));
+                            multiplyPolinoms.Add(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p));
                             }
                         }
 
                     }
 
-                    foreach (Polinom m in multiplyPolinoms)
-                    {
-                        if (biggestPower(m) <= pow)
-                        {
-                            testPolinoms.Add(m);
+                    foreach (Polinom m in multiplyPolinoms) {
+                        if (biggestPower(m)<=pow) { 
+                        testPolinoms.Add(m);
                         }
                     }
 
@@ -354,10 +328,10 @@ namespace ClsPolinom
                         }
                         if (isIrreducible == true)
                         {
-                            IrreduciblePolinoms.Add(candidate);
+                                IrreduciblePolinoms.Add(candidate);
                             testPolinoms.Add(candidate);
                         }
-
+                        
                     }
 
                 }
@@ -367,19 +341,17 @@ namespace ClsPolinom
         }
 
 
-        public static List<Polinom> GeneratePolinoms(int power, int p)
-        {
-            List<Polinom> Polinoms = new List<Polinom>();
-
+        public static List<Polinom> GeneratePolinoms(int power, int p) {
+            List<Polinom> Polinoms=new List<Polinom>();
+         
             int calcValue = (int)Math.Pow(p, power);
             int tempValue;
             List<Monom> Monoms;
             Polinom Pol;
             //Generate Coefficient Matrix
 
-            int[,] coefMatrix = new int[(int)Math.Pow(p, power) * (p - 1), (power + 1)];
-            for (int row = 0; row < (int)Math.Pow(p, power) * (p - 1); row++)
-            {
+            int[,] coefMatrix = new int[(int)Math.Pow(p, power) *(p-1), (power + 1)];
+            for (int row = 0; row< (int)Math.Pow(p, power) * (p - 1); row++) {
                 tempValue = calcValue;
                 for (int column = power; column >= 0; column--)
                 {
@@ -387,14 +359,12 @@ namespace ClsPolinom
                     {
                         coefMatrix[row, column] = tempValue / ((int)Math.Pow(p, column));
                     }
-                    else
-                    {
-                        coefMatrix[row, column] = tempValue;
-                    }
+                    else {coefMatrix[row, column] = tempValue;
+                }
                     tempValue = tempValue - (coefMatrix[row, column] * ((int)Math.Pow(p, column)));
                 }
                 calcValue++;
-
+              
             }
 
             //Generate polinoms using Coefficient Matrix
@@ -402,35 +372,31 @@ namespace ClsPolinom
             for (int row = 0; row < (int)Math.Pow(p, power) * (p - 1); row++)
             {
                 Monoms = new List<Monom>();
-                for (int column = power; column >= 0; column--)
-                {
+                for (int column = power; column >= 0; column--) {
 
                     Monoms.Add(new Monom(coefMatrix[row, column], "x", (ulong)column));
                 }
-                Pol = new Polinom(Monoms);
+                Pol=new Polinom(Monoms);
                 if (MaxMonom(Pol).Coefficient == 1) { Polinoms.Add(Pol); }
             }
             return Polinoms;
-
+            
             //throw new NotImplementedException();
 
         }
 
 
-        public static Polinom calcPolinomToZp(Polinom input, int p)
-        {
+        public static Polinom calcPolinomToZp(Polinom input, int p) {
             Polinom retPolinom = new Polinom();
 
-            foreach (Monom m in input.List)
-            {
+            foreach (Monom m in input.List) {
                 if (m.Coefficient > 0)
                 {
                     retPolinom.add(new Monom(m.Coefficient % p, m.Variable, m.Exponent));
                 }
-                else if (m.Coefficient < 0)
-                {
+                else if (m.Coefficient<0){
 
-                    retPolinom.add(new Monom((m.Coefficient % p) + p, m.Variable, m.Exponent));
+                    retPolinom.add(new Monom((m.Coefficient % p)+p, m.Variable, m.Exponent));
                 }
 
             }
@@ -444,8 +410,7 @@ namespace ClsPolinom
             //return base.ToString();
             string ret = "";
             int i = 0;
-            foreach (Monom m in List)
-            {
+            foreach (Monom m in list) {
 
                 if (m.Coefficient != 0)
                 {
@@ -468,24 +433,22 @@ namespace ClsPolinom
 
 
                 }
-
+               
                 i++;
-
+                
             }
             return ret.TrimEnd(new Char[] { ' ', '+' });
         }
 
-        public static Polinom PolinomFromString(string input)
-        {
+        public static Polinom PolinomFromString(string input) {
             Monom m;
-            Regex regex;
+            Regex regex ;
             Match match;
             Polinom retPolinom = new Polinom();
-
+          
             //ulong intResult;
             string[] arrinput = input.Split('-', '+');
-            for (int i = 0; i < arrinput.Count(); i++)
-            {
+            for (int i = 0; i < arrinput.Count(); i++) {
                 m = new Monom();
                 /*
               five kind of monom could be:
@@ -521,9 +484,9 @@ namespace ClsPolinom
                             m.Exponent = 1;
                         }
                     }
-                    else
-                    {
+                    else {
                         m.Coefficient = 1;
+                        // get exponent
                         match = regex.Match(arrinput[i]);
                         if (match.Success)
                         {
@@ -533,8 +496,7 @@ namespace ClsPolinom
                     }
 
                 }
-                else
-                {
+                else {
                     m.Coefficient = Convert.ToInt64(arrinput[i]);
                     m.Variable = "x";
                     m.Exponent = 0;
@@ -543,12 +505,11 @@ namespace ClsPolinom
 
                 retPolinom.add(m);
 
-            }
+                }
             return retPolinom;
-        }
+            }
 
-        public static Polinom Sorter(Polinom unsorted)
-        {
+        public static Polinom Sorter(Polinom unsorted) {
             List<Monom> sorted = unsorted.List;
             sorted.Sort(delegate (Monom m1, Monom m2)
             {
@@ -572,8 +533,8 @@ namespace ClsPolinom
             return retMonom;
         }
     }
+    
 
-
-
-
+    
+    
 }
