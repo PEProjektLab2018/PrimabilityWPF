@@ -5,23 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektLab"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1024">
     <Grid>
         <TabControl >
             <TabItem Header="Prímszámok" Name="tiPrime">
                 <local:Prime></local:Prime>
             </TabItem>
             <TabItem Header="Polinom" Name="tiPolinom">
-                <local:Polinom Margin="0,-5,0,2" RenderTransformOrigin="0.5,0.5">
-                    <local:Polinom.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform AngleX="-0.145"/>
-                            <RotateTransform/>
-                            <TranslateTransform X="0.497"/>
-                        </TransformGroup>
-                    </local:Polinom.RenderTransform>
+                <local:Polinom>
                 </local:Polinom>
+            </TabItem>
+            <TabItem Header="Véges testek" Name="tiFiniteField">
+                <local:FiniteField>
+                </local:FiniteField>
             </TabItem>
         </TabControl>
 

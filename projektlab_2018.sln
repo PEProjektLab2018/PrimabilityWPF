@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjektLab", "ProjektLab\Pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolinomClass", "Polinom\PolinomClass.csproj", "{65226EC8-443C-4246-8131-72F5556ADF9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiniteFieldLibrary", "FiniteField\FiniteFieldLibrary.csproj", "{C7F7D74E-A2F5-4EEB-AF3E-736D89E65C98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{65226EC8-443C-4246-8131-72F5556ADF9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65226EC8-443C-4246-8131-72F5556ADF9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65226EC8-443C-4246-8131-72F5556ADF9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F7D74E-A2F5-4EEB-AF3E-736D89E65C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F7D74E-A2F5-4EEB-AF3E-736D89E65C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F7D74E-A2F5-4EEB-AF3E-736D89E65C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F7D74E-A2F5-4EEB-AF3E-736D89E65C98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -73,12 +73,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FiniteField.xaml.cs">
+      <DependentUpon>FiniteField.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GreaterThanZeroValidationRule.cs" />
     <Compile Include="MyNumber.cs" />
     <Compile Include="Polinom.xaml.cs">
       <DependentUpon>Polinom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PrimeValidationRule.cs" />
     <Compile Include="StringToUint64ValidationRule.cs" />
+    <Page Include="FiniteField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -132,6 +140,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FiniteField\FiniteFieldLibrary.csproj">
+      <Project>{c7f7d74e-a2f5-4eeb-af3e-736d89e65c98}</Project>
+      <Name>FiniteFieldLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Polinom\PolinomClass.csproj">
       <Project>{65226ec8-443c-4246-8131-72f5556adf9f}</Project>
       <Name>PolinomClass</Name>
