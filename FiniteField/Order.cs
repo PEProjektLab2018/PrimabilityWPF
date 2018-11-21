@@ -8,15 +8,15 @@ namespace FiniteFieldLibrary
 {
     public class Order
     {
-        public uint Mantissa { get; set; }
-        public uint Exponent { get; set; }
+        public int Mantissa { get; set; }
+        public int Exponent { get; set; }
 
         public Order()
         {
 
         }
 
-        public Order(uint mantissa, uint exponent)
+        public Order(int mantissa, int exponent)
         {
             this.Mantissa = mantissa;
             this.Exponent = exponent;

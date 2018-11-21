@@ -77,17 +77,73 @@ namespace ProjektLab
 
         private void buttonClick(object sender, RoutedEventArgs e)
         {
-            polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(unchecked((int)MyOrder.Exponent), unchecked((int)MyOrder.Mantissa));
-        }
-
-        private void generateTables(object sender, RoutedEventArgs e)
-        {
-            Testing.Text = polinom.SelectedItem.ToString();
+            Button.IsEnabled = false;
+            ButtonSpinner.Visibility = Visibility.Visible;
+            polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
+            ButtonSpinner.Visibility = Visibility.Hidden;
+            Button.IsEnabled = true;
         }
 
         private void polinomDropDownClosed(object sender, EventArgs e)
         {
             TableButton.IsEnabled = true;
+        }
+
+        private void generateTables(object sender, RoutedEventArgs e)
+        {
+            TableButtonSpinner.Visibility = Visibility.Visible;
+            TableButton.IsEnabled = false;
+
+            List<ClsPolinom.Polinom> columns = FiniteFieldLibrary.FiniteField.generateMembers(MyOrder);
+            ResultGrid.Visibility = Visibility.Visible;
+            SummationGrid.Columns.Clear();
+                MultiplicationGrid.Columns.Clear();
+            foreach (ClsPolinom.Polinom polinom in columns)
+            {
+                DataGridTextColumn columnSum = new DataGridTextColumn();
+                columnSum.Header = getPolinomTextBlock(polinom);
+                SummationGrid.Columns.Add(columnSum);
+
+                DataGridTextColumn columnMul = new DataGridTextColumn();
+                columnMul.Header = polinom.ToString();
+                MultiplicationGrid.Columns.Add(columnMul);
+            }
+
+            TableButtonSpinner.Visibility = Visibility.Hidden;
+            TableButton.IsEnabled = true;
+        }
+
+        private static TextBlock getPolinomTextBlock(ClsPolinom.Polinom polinom)
+        {
+            TextBlock tbkPolinom = new TextBlock();
+
+            int i = 0;
+            foreach (ClsPolinom.Monom m in polinom.List)
+            {
+                if (i > 0 && m.Coefficient > 1) { tbkPolinom.Inlines.Add("+"); }
+                if (m.Coefficient == 0) continue;
+                if (m.Coefficient > 1)
+                {
+                    //tbkPolinom.Text += m.Coefficient;
+                    tbkPolinom.Inlines.Add(m.Coefficient.ToString());
+                }
+                if (m.Exponent != 0)
+                {
+                    //tbkPolinom.Text += m.Variable;
+                    tbkPolinom.Inlines.Add(m.Variable);
+                    if (m.Exponent > 1)
+                    {
+                        Run run = new Run();
+                        run.Text = m.Exponent.ToString();
+                        run.BaselineAlignment = BaselineAlignment.Superscript;
+                        tbkPolinom.Inlines.Add(run);
+
+                    }
+                }
+                i++;
+            }
+
+            return tbkPolinom;
         }
     }
 }
