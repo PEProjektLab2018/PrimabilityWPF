@@ -19,11 +19,19 @@ namespace ClsPolinom
 
         public Polinom(List<Monom> L)
         {
-            this.list = L;
+            this.list = new List<Monom>(L.Count());
+            foreach (Monom m in L)
+            {
+                this.list.Add(new Monom(m));
+            }
         }
         public Polinom(Polinom P)
         {
-            this.list = P.list;
+            this.list = new List<Monom>(P.list.Count());
+            foreach(Monom m in P.list)
+            {
+                this.list.Add(new Monom(m));
+            }
         }
 
         public class Enumerator
@@ -124,7 +132,7 @@ namespace ClsPolinom
 
             foreach (Monom m in newMonomList)
             {
-                pol.add(m);
+                pol.add(new Monom(m));
             }
 
             return Sorter(pol);

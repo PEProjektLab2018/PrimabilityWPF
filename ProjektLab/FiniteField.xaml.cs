@@ -166,29 +166,29 @@ namespace ProjektLab
                 });
             });
 
-
-            await Task.Run(() =>
+            int calcSize = (int)Math.Pow(MyOrder.Mantissa, MyOrder.Exponent);
+            for (int i = 0; i < calcSize; i++)
             {
-                int calcSize = (int)Math.Pow(MyOrder.Mantissa, MyOrder.Exponent);
-                for (int i = 0; i < calcSize; i++)
+                ClsPolinom.Polinom rowPolinom = SummationTable.Rows[i].Label;
+                for (int j = 0; j < calcSize; j++)
                 {
-                    ClsPolinom.Polinom rowPolinom = SummationTable.Rows[i].Label;
-                    for (int j = 0; j < calcSize; j++)
+                    ClsPolinom.Polinom colPolinom = SummationTable.Rows[j].Label;
+                    await Task.Run(() =>
                     {
-                        ClsPolinom.Polinom colPolinom = SummationTable.Rows[j].Label;
-
                         SummationTable.Rows[i].Polinoms[j] = rowPolinom + colPolinom;
-                        MultiplicationTable.Rows[i].Polinoms[j] = rowPolinom * colPolinom;
                         //SummationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom + colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
+                    });
+                    SummationGrid.ItemsSource = null;
+                    SummationGrid.ItemsSource = SummationTable.Rows;
+                    await Task.Run(() =>
+                    {
+                        MultiplicationTable.Rows[i].Polinoms[j] = rowPolinom * colPolinom;
                         //MultiplicationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom * colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
-                    }
+                    });
+                    MultiplicationGrid.ItemsSource = null;
+                    MultiplicationGrid.ItemsSource = MultiplicationTable.Rows;
                 }
-            });
-
-            SummationGrid.ItemsSource = null;
-            SummationGrid.ItemsSource = SummationTable.Rows;
-            MultiplicationGrid.ItemsSource = null;
-            MultiplicationGrid.ItemsSource = MultiplicationTable.Rows;
+            }
 
             ResultGrid.Visibility = Visibility.Visible;
             TableButtonSpinner.Visibility = Visibility.Hidden;
