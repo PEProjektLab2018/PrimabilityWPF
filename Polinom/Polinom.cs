@@ -22,7 +22,7 @@ namespace ClsPolinom
             this.list = new List<Monom>(L.Count());
             foreach (Monom m in L)
             {
-                this.list.Add(new Monom(m));
+                this.add(new Monom(m));
             }
         }
         public Polinom(Polinom P)
@@ -30,7 +30,7 @@ namespace ClsPolinom
             this.list = new List<Monom>(P.list.Count());
             foreach(Monom m in P.list)
             {
-                this.list.Add(new Monom(m));
+                this.add(new Monom(m));
             }
         }
 
@@ -65,8 +65,10 @@ namespace ClsPolinom
             }
             else
             {
-                this.list.Add(monom);
-
+                if (monom.Coefficient != 0)
+                {
+                    this.list.Add(monom);
+                }
             }
             return this;
         }
