@@ -153,9 +153,6 @@ namespace ProjektLab
                 ResultGrid.Dispatcher.Invoke(() => { 
                     List<ClsPolinom.Polinom> columns = FiniteFieldLibrary.FiniteField.generateMembers(MyOrder);
 
-                    SummationGrid.Columns.Add(getDataGridTemplateColumn("+", "Label"));
-                    MultiplicationGrid.Columns.Add(getDataGridTemplateColumn("*", "Label"));
-
                     int i = 0;
                     foreach (ClsPolinom.Polinom polinom in columns)
                     {

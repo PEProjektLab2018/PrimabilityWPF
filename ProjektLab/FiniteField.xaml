@@ -8,6 +8,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1024" Width="Auto" Height="Auto" Background="White"
              >
+    <UserControl.Resources>
+        <local:PolinomToXamlConverter x:Key="PolinomToXamlConverter" />
+    </UserControl.Resources>
     <StackPanel>
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
             <Grid.ColumnDefinitions>
@@ -126,29 +129,49 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <TabControl Visibility="hidden" Width="900" Height="400" Name="ResultGrid">
+        <TabControl Visibility="Hidden" Width="900" Height="400" Name="ResultGrid">
             <TabItem Header="Összeadás">
                 <DataGrid 
                         Name="SummationGrid" 
-                        FrozenColumnCount="1" 
                         ItemsSource="{Binding SummationTable.Rows}"
                         ScrollViewer.CanContentScroll="True" 
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                         AutoGenerateColumns="False"
                         >
-                    </DataGrid>
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.RowHeaderStyle>
+                        <Style TargetType="{x:Type DataGridRowHeader}">
+                            <Setter Property="Content" Value="{Binding Path=Label, Converter={StaticResource PolinomToXamlConverter}}" />
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGrid.RowHeaderStyle>
+                </DataGrid>
             </TabItem>
             <TabItem Header="Szorzás">
                 <DataGrid 
                         Name="MultiplicationGrid" 
-                        FrozenColumnCount="1" 
                         ItemsSource="{Binding MultiplicationTable.Rows}"
                         ScrollViewer.CanContentScroll="True" 
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                         AutoGenerateColumns="False"
                         >
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.RowHeaderStyle>
+                        <Style TargetType="{x:Type DataGridRowHeader}">
+                            <Setter Property="Content" Value="{Binding Path=Label, Converter={StaticResource PolinomToXamlConverter}}" />
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGrid.RowHeaderStyle>
                 </DataGrid>
             </TabItem>
         </TabControl>
