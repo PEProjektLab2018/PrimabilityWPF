@@ -96,13 +96,29 @@
                 </StackPanel>
             </Button>
         </Grid>
-        <TabControl Visibility="hidden" Width="1000" Name="ResultGrid">
+        <TabControl Visibility="hidden" Width="900" Height="400" Name="ResultGrid">
             <TabItem Header="Összeadás">
-                <DataGrid Name="SummationGrid" FrozenColumnCount="1" ItemsSource="{Binding SummationTable.Rows}">
+                <DataGrid 
+                    Name="SummationGrid" 
+                    FrozenColumnCount="1" 
+                    ItemsSource="{Binding SummationTable.Rows}"
+                    ScrollViewer.CanContentScroll="True" 
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    AutoGenerateColumns="False"
+                    >
                 </DataGrid>
             </TabItem>
             <TabItem Header="Szorzás">
-                <DataGrid Name="MultiplicationGrid" FrozenColumnCount="1">
+                <DataGrid 
+                    Name="MultiplicationGrid" 
+                    FrozenColumnCount="1" 
+                    ItemsSource="{Binding MultiplicationTable.Rows}"
+                    ScrollViewer.CanContentScroll="True" 
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    AutoGenerateColumns="False"
+                    >
                 </DataGrid>
             </TabItem>
         </TabControl>

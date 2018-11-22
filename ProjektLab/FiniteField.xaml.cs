@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FiniteFieldLibrary;
 using ClsPolinom;
+using System.Threading;
 
 namespace ProjektLab
 {
@@ -25,16 +26,24 @@ namespace ProjektLab
         public Order MyOrder { get; set; }
         public ClsPolinom.Polinom IrreduciblePolinom { get; set; }
         public FiniteFieldTableViewModel SummationTable { get; set; }
+        public FiniteFieldTableViewModel MultiplicationTable { get; set; }
+        Thread IrreducibleThread { get; set; }
+
+        private static IValueConverter polinomToXmlConverter;
 
         public FiniteField()
         {
             InitializeComponent();
 
             MyOrder = new Order(0, 0);
-            SummationTable = new FiniteFieldTableViewModel();
 
+            SummationTable = new FiniteFieldTableViewModel();
+            MultiplicationTable = new FiniteFieldTableViewModel();
+
+            polinomToXmlConverter = new PolinomToXamlConverter();
+
+            polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
             DataContext = this;
-            polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(unchecked((int) MyOrder.Exponent), unchecked((int) MyOrder.Mantissa));
         }
 
         private void primeError(object sender, ValidationErrorEventArgs e)
@@ -81,7 +90,19 @@ namespace ProjektLab
         {
             Button.IsEnabled = false;
             ButtonSpinner.Visibility = Visibility.Visible;
-            polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
+            getIrreducible();
+        }
+
+        private async void getIrreducible()
+        {
+            IrreducibleThread = null;
+            List<ClsPolinom.Polinom> list = await Task.Run<List<ClsPolinom.Polinom>>(() =>
+            {
+                IrreducibleThread = Thread.CurrentThread;
+                return ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
+            });
+            polinom.ItemsSource = list;
+            IrreducibleThread = null;
             ButtonSpinner.Visibility = Visibility.Hidden;
             Button.IsEnabled = true;
         }
@@ -96,37 +117,66 @@ namespace ProjektLab
             TableButtonSpinner.Visibility = Visibility.Visible;
             TableButton.IsEnabled = false;
 
-            List<ClsPolinom.Polinom> columns = FiniteFieldLibrary.FiniteField.generateMembers(MyOrder);
-            ResultGrid.Visibility = Visibility.Visible;
             SummationGrid.Columns.Clear();
+            SummationTable.Clear(); ;
+
             MultiplicationGrid.Columns.Clear();
+            MultiplicationTable.Clear();
 
-            DataGridTextColumn plusSign = new DataGridTextColumn();
-            plusSign.Header = "+";
-            Binding plusBinding = new Binding("Label");
-            plusBinding.Converter = new PolinomToXamlConverter();
-            plusSign.Binding = plusBinding;
-            SummationGrid.Columns.Add(plusSign);
-            DataGridTextColumn multiplySign = new DataGridTextColumn();
-            multiplySign.Header = "*";
-            MultiplicationGrid.Columns.Add(multiplySign);
+            generateTablesAsync();
+        }
 
-            int i = 0;
-            foreach (ClsPolinom.Polinom polinom in columns)
+        private async void generateTablesAsync()
+        {
+            await Task.Run(() =>
             {
-                SummationTable.createRow(columns.Count());
-                DataGridTextColumn columnSum = new DataGridTextColumn();
-                columnSum.Header = getPolinomTextBlock(polinom);
-                columnSum.Binding = new Binding(String.Format("Polinoms[{0}]", i));
-                SummationGrid.Columns.Add(columnSum);
-                SummationTable.Rows[i].Label = polinom;
+                ResultGrid.Dispatcher.Invoke(() => { 
+                    List<ClsPolinom.Polinom> columns = FiniteFieldLibrary.FiniteField.generateMembers(MyOrder);
 
-                DataGridTextColumn columnMul = new DataGridTextColumn();
-                columnMul.Header = getPolinomTextBlock(polinom);
-                MultiplicationGrid.Columns.Add(columnMul);
-                i++;
-            }
+                    SummationGrid.Columns.Add(getDataGridTemplateColumn("+", "Label"));
+                    MultiplicationGrid.Columns.Add(getDataGridTemplateColumn("*", "Label"));
 
+                    int i = 0;
+                    foreach (ClsPolinom.Polinom polinom in columns)
+                    {
+                        SummationTable.createRow(columns.Count());
+                        SummationGrid.Columns.Add(getDataGridTemplateColumn(getPolinomTextBlock(polinom), String.Format("Polinoms[{0}]", i)));
+                        SummationTable.Rows[i].Label = polinom;
+
+                        MultiplicationTable.createRow(columns.Count());
+                        MultiplicationGrid.Columns.Add(getDataGridTemplateColumn(getPolinomTextBlock(polinom), String.Format("Polinoms[{0}]", i)));
+                        MultiplicationTable.Rows[i].Label = polinom;
+
+                        i++;
+                    }
+                });
+            });
+
+
+            await Task.Run(() =>
+            {
+                int calcSize = (int)Math.Pow(MyOrder.Mantissa, MyOrder.Exponent);
+                for (int i = 0; i < calcSize; i++)
+                {
+                    ClsPolinom.Polinom rowPolinom = SummationTable.Rows[i].Label;
+                    for (int j = 0; j < calcSize; j++)
+                    {
+                        ClsPolinom.Polinom colPolinom = SummationTable.Rows[j].Label;
+
+                        SummationTable.Rows[i].Polinoms[j] = rowPolinom + colPolinom;
+                        MultiplicationTable.Rows[i].Polinoms[j] = rowPolinom * colPolinom;
+                        //SummationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom + colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
+                        //MultiplicationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom * colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
+                    }
+                }
+            });
+
+            SummationGrid.ItemsSource = null;
+            SummationGrid.ItemsSource = SummationTable.Rows;
+            MultiplicationGrid.ItemsSource = null;
+            MultiplicationGrid.ItemsSource = MultiplicationTable.Rows;
+
+            ResultGrid.Visibility = Visibility.Visible;
             TableButtonSpinner.Visibility = Visibility.Hidden;
             TableButton.IsEnabled = true;
         }
@@ -169,6 +219,25 @@ namespace ProjektLab
             }
 
             return tbkPolinom;
+        }
+
+        private static DataGridTemplateColumn getDataGridTemplateColumn(object header, string bindingString)
+        {
+            DataGridTemplateColumn column = new DataGridTemplateColumn();
+
+            column.Header = header;
+
+            Binding binding = new Binding(bindingString);
+            binding.Converter = polinomToXmlConverter;
+
+            FrameworkElementFactory labelFactory = new FrameworkElementFactory(typeof(Label));
+            labelFactory.SetBinding(Label.ContentProperty, binding);
+            DataTemplate template = new DataTemplate();
+            template.VisualTree = labelFactory;
+
+            column.CellTemplate = template;
+
+            return column;
         }
     }
 }

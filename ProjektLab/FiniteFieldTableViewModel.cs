@@ -18,6 +18,10 @@ namespace ProjektLab
             public Row(int count)
             {
                 Polinoms = new List<ClsPolinom.Polinom>(count);
+                for (int i = 0; i < count; i++)
+                {
+                    Polinoms.Add(null);
+                }
             }
         }
 
@@ -31,6 +35,11 @@ namespace ProjektLab
         public void createRow(int count)
         {
             Rows.Add(new Row(count));
+        }
+
+        public void Clear()
+        {
+            Rows.Clear();
         }
     }
 }

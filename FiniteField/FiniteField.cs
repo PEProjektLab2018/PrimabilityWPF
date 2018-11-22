@@ -42,7 +42,10 @@ namespace FiniteFieldLibrary
                 List<Monom> Monoms = new List<Monom>();
                 for (int column = 0; column < power; column++)
                 {
-                    Monoms.Add(new Monom(coefMatrix[row, column], "x", (ulong) (power - column - 1)));
+                    if (coefMatrix[row, column] > 0)
+                    {
+                        Monoms.Add(new Monom(coefMatrix[row, column], "x", (ulong)(power - column - 1)));
+                    }
                 }
                 Polinom Pol = new Polinom(Monoms);
                 Polinoms.Add(Pol);
