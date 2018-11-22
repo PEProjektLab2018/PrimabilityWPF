@@ -23,6 +23,19 @@ namespace ProjektLab
                     Polinoms.Add(null);
                 }
             }
+
+            override
+            public string ToString()
+            {
+                string res = Label.ToString();
+
+                foreach(ClsPolinom.Polinom pol in Polinoms)
+                {
+                    res += ";" + pol.ToString();
+                }
+
+                return res.Trim(new Char[] { ';' });
+            }
         }
 
         public List<Row> Rows { get; set; }
@@ -40,6 +53,18 @@ namespace ProjektLab
         public void Clear()
         {
             Rows.Clear();
+        }
+
+        public List<string> GetLabels()
+        {
+            List<string> res = new List<string>(Rows.Count());
+
+            foreach(Row row in Rows)
+            {
+                res.Add(row.Label.ToString());
+            }
+
+            return res;
         }
     }
 }

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using FiniteFieldLibrary;
 using ClsPolinom;
 using System.Threading;
+using System.IO;
 
 namespace ProjektLab
 {
@@ -45,19 +46,18 @@ namespace ProjektLab
             polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
             DataContext = this;
 
-            /*
-             * TESTING
-            ClsPolinom.Polinom a, b, r;
+            /*ClsPolinom.Polinom a, b, r;
             a = new ClsPolinom.Polinom();
             b = new ClsPolinom.Polinom();
             r = new ClsPolinom.Polinom();
 
-            r.add(new Monom(1, 3)).add(new Monom(1, 1)).add(new Monom(1, 0));
+            r.add(new Monom(1, 1)).add(new Monom(1, 0));
 
             a.add(new Monom(1, 1)).add(new Monom(1, 0));
-            b.add(new Monom(1, 2));
-            */
-            
+            b.add(new Monom(1, 1));
+
+            ClsPolinom.Polinom t = (b + a) % r;
+            ClsPolinom.Polinom t2 = b % r;*/
         }
 
         private void primeError(object sender, ValidationErrorEventArgs e)
@@ -128,14 +128,20 @@ namespace ProjektLab
 
         private void generateTables(object sender, RoutedEventArgs e)
         {
+            disableExportButtons();
             TableButtonSpinner.Visibility = Visibility.Visible;
             TableButton.IsEnabled = false;
 
-            SummationGrid.Columns.Clear();
+            SummationGrid.ItemsSource = null;
             SummationTable.Clear(); ;
+            SummationGrid.Columns.Clear();
+            SummationGrid.ItemsSource = SummationTable.Rows;
 
-            MultiplicationGrid.Columns.Clear();
+            MultiplicationGrid.ItemsSource = null;
             MultiplicationTable.Clear();
+            MultiplicationGrid.Columns.Clear();
+            MultiplicationGrid.ItemsSource = MultiplicationTable.Rows;
+
 
             generateTablesAsync();
         }
@@ -165,6 +171,7 @@ namespace ProjektLab
                     }
                 });
             });
+            ResultGrid.Visibility = Visibility.Visible;
 
             int calcSize = (int)Math.Pow(MyOrder.Mantissa, MyOrder.Exponent);
             for (int i = 0; i < calcSize; i++)
@@ -190,9 +197,9 @@ namespace ProjektLab
                 }
             }
 
-            ResultGrid.Visibility = Visibility.Visible;
             TableButtonSpinner.Visibility = Visibility.Hidden;
             TableButton.IsEnabled = true;
+            enableExportButtons();
         }
 
         private static TextBlock getPolinomTextBlock(ClsPolinom.Polinom polinom)
@@ -252,6 +259,84 @@ namespace ProjektLab
             column.CellTemplate = template;
 
             return column;
+        }
+
+        private void MultiplicationTableExport_Click(object sender, RoutedEventArgs e)
+        {
+            var csv = new StringBuilder();
+
+            csv.AppendLine("*;" + string.Join(";", MultiplicationTable.GetLabels()));
+
+            for(int i = 0; i < MultiplicationTable.Rows.Count(); i++)
+            {
+                csv.AppendLine(MultiplicationTable.Rows[i].ToString());
+            }
+
+            Microsoft.Win32.SaveFileDialog dialog = getDialog();
+
+            // Show save file dialog box
+            Nullable<bool> result = dialog.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dialog.FileName;
+
+                File.WriteAllText(filename, csv.ToString());
+            }
+        }
+
+        private void SummationTableExport_Click(object sender, RoutedEventArgs e)
+        {
+            var csv = new StringBuilder();
+
+            csv.AppendLine("+;" + string.Join(";", SummationTable.GetLabels()));
+
+            for (int i = 0; i < SummationTable.Rows.Count(); i++)
+            {
+                csv.AppendLine(SummationTable.Rows[i].ToString());
+            }
+
+            Microsoft.Win32.SaveFileDialog dialog = getDialog();
+
+            // Show save file dialog box
+            Nullable<bool> result = dialog.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dialog.FileName;
+
+                File.WriteAllText(filename, csv.ToString());
+            }
+        }
+
+        private Microsoft.Win32.SaveFileDialog getDialog()
+        {
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = "export";
+            dialog.DefaultExt = ".csv";
+            dialog.Filter = "CSV (.csv)|*.csv";
+
+            return dialog;
+        }
+
+        private void disableExportButtons()
+        {
+            MultiplicationTableExport.Visibility = Visibility.Hidden;
+            SummationTableExport.Visibility = Visibility.Hidden;
+            MultiplicationTableExport.IsEnabled = false;
+            SummationTableExport.IsEnabled = false;
+        }
+
+        private void enableExportButtons()
+        {
+            MultiplicationTableExport.Visibility = Visibility.Visible;
+            SummationTableExport.Visibility = Visibility.Visible;
+            MultiplicationTableExport.IsEnabled = true;
+            SummationTableExport.IsEnabled = true;
         }
     }
 }

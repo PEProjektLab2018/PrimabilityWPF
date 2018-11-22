@@ -12,9 +12,10 @@
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"></RowDefinition>
@@ -95,30 +96,59 @@
                     <fa:FontAwesome Icon="Spinner" Spin="True" Name="TableButtonSpinner" Visibility="Hidden"/>
                 </StackPanel>
             </Button>
+            <StackPanel 
+                Orientation="Horizontal"
+                Grid.Row="5"
+                Grid.Column="3"
+                Grid.ColumnSpan="2"
+                >
+                <Button Grid.Row="5" Grid.ColumnSpan="2"
+                    Name="SummationTableExport"
+                    IsEnabled="False"
+                    Click="SummationTableExport_Click"
+                    Padding="10,0"
+                >
+                    <StackPanel Orientation="Horizontal">
+                        <fa:FontAwesome Icon="Download" Visibility="Visible" VerticalAlignment="Center"/>
+                        <TextBlock Text="Összeadás mentése" VerticalAlignment="Center" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Row="5" Grid.ColumnSpan="2"
+                    Name="MultiplicationTableExport"
+                    IsEnabled="False"
+                    Click="MultiplicationTableExport_Click"
+                        Padding="10,0"
+                >
+                    <StackPanel Orientation="Horizontal">
+                        <fa:FontAwesome Icon="Download" Visibility="Visible" VerticalAlignment="Center"/>
+                        <TextBlock Text="Szorzás mentése" VerticalAlignment="Center" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
         </Grid>
         <TabControl Visibility="hidden" Width="900" Height="400" Name="ResultGrid">
             <TabItem Header="Összeadás">
                 <DataGrid 
-                    Name="SummationGrid" 
-                    FrozenColumnCount="1" 
-                    ItemsSource="{Binding SummationTable.Rows}"
-                    ScrollViewer.CanContentScroll="True" 
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                    AutoGenerateColumns="False"
-                    >
-                </DataGrid>
+                        Name="SummationGrid" 
+                        FrozenColumnCount="1" 
+                        ItemsSource="{Binding SummationTable.Rows}"
+                        ScrollViewer.CanContentScroll="True" 
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        AutoGenerateColumns="False"
+                        >
+                    </DataGrid>
             </TabItem>
             <TabItem Header="Szorzás">
                 <DataGrid 
-                    Name="MultiplicationGrid" 
-                    FrozenColumnCount="1" 
-                    ItemsSource="{Binding MultiplicationTable.Rows}"
-                    ScrollViewer.CanContentScroll="True" 
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                    AutoGenerateColumns="False"
-                    >
+                        Name="MultiplicationGrid" 
+                        FrozenColumnCount="1" 
+                        ItemsSource="{Binding MultiplicationTable.Rows}"
+                        ScrollViewer.CanContentScroll="True" 
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        AutoGenerateColumns="False"
+                        >
                 </DataGrid>
             </TabItem>
         </TabControl>
