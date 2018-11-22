@@ -97,7 +97,16 @@ namespace ProjektLab
             List<ClsPolinom.Polinom> columns = FiniteFieldLibrary.FiniteField.generateMembers(MyOrder);
             ResultGrid.Visibility = Visibility.Visible;
             SummationGrid.Columns.Clear();
-                MultiplicationGrid.Columns.Clear();
+            MultiplicationGrid.Columns.Clear();
+
+            DataGridTextColumn plusSign = new DataGridTextColumn();
+            plusSign.Header = "+";
+            SummationGrid.Columns.Add(plusSign);
+            DataGridTextColumn multiplySign = new DataGridTextColumn();
+            multiplySign.Header = "*";
+            MultiplicationGrid.Columns.Add(multiplySign);
+
+
             foreach (ClsPolinom.Polinom polinom in columns)
             {
                 DataGridTextColumn columnSum = new DataGridTextColumn();
@@ -105,7 +114,7 @@ namespace ProjektLab
                 SummationGrid.Columns.Add(columnSum);
 
                 DataGridTextColumn columnMul = new DataGridTextColumn();
-                columnMul.Header = polinom.ToString();
+                columnMul.Header = getPolinomTextBlock(polinom);
                 MultiplicationGrid.Columns.Add(columnMul);
             }
 
@@ -120,27 +129,34 @@ namespace ProjektLab
             int i = 0;
             foreach (ClsPolinom.Monom m in polinom.List)
             {
-                if (i > 0 && m.Coefficient > 1) { tbkPolinom.Inlines.Add("+"); }
-                if (m.Coefficient == 0) continue;
-                if (m.Coefficient > 1)
+                if (m.Coefficient != 0)
                 {
-                    //tbkPolinom.Text += m.Coefficient;
-                    tbkPolinom.Inlines.Add(m.Coefficient.ToString());
-                }
-                if (m.Exponent != 0)
-                {
-                    //tbkPolinom.Text += m.Variable;
-                    tbkPolinom.Inlines.Add(m.Variable);
-                    if (m.Exponent > 1)
-                    {
-                        Run run = new Run();
-                        run.Text = m.Exponent.ToString();
-                        run.BaselineAlignment = BaselineAlignment.Superscript;
-                        tbkPolinom.Inlines.Add(run);
+                    if (i > 0) { tbkPolinom.Inlines.Add("+"); }
 
+                    if ((m.Exponent == 0 && m.Coefficient == 1) || m.Coefficient > 1)
+                    {
+                        tbkPolinom.Inlines.Add(m.Coefficient.ToString());
                     }
+
+                    if (m.Exponent != 0)
+                    {
+                        tbkPolinom.Inlines.Add(m.Variable);
+                        if (m.Exponent > 1)
+                        {
+                            Run run = new Run();
+                            run.Text = m.Exponent.ToString();
+                            run.BaselineAlignment = BaselineAlignment.Superscript;
+                            tbkPolinom.Inlines.Add(run);
+
+                        }
+                    }
+                    i++;
                 }
-                i++;
+            }
+
+            if (i == 0)
+            {
+                tbkPolinom.Inlines.Add("0");
             }
 
             return tbkPolinom;

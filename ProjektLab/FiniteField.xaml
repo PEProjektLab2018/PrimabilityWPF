@@ -99,12 +99,10 @@
         <TabControl Visibility="hidden" Width="800" Name="ResultGrid">
             <TabItem Header="Összeadás" HorizontalAlignment="Center">
                 <DataGrid Name="SummationGrid" FrozenColumnCount="1">
-                    <DataGridTextColumn Header="+"/>
                 </DataGrid>
             </TabItem>
             <TabItem Header="Szorzás" HorizontalAlignment="Center">
                 <DataGrid Name="MultiplicationGrid" FrozenColumnCount="1">
-                    <DataGridTextColumn Header="*"/>
                 </DataGrid>
             </TabItem>
         </TabControl>

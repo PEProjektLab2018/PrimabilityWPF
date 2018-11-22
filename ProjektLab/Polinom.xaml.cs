@@ -21,15 +21,16 @@ namespace ProjektLab
             // DataContext = this;
         }
 
-        void btnMod_click(object sender, RoutedEventArgs e) {
+        void btnMod_click(object sender, RoutedEventArgs e)
+        {
             tbkMod.Text = tbkPolinom.Text;
 
         }
-      
+
 
         void Polinom_KeyDown(object sender, KeyEventArgs e)
         {
-            
+
             string number = "";
             if ((e.Key >= Key.D0 && e.Key <= Key.D9))
             {
@@ -40,7 +41,8 @@ namespace ProjektLab
             {
                 number = e.Key.ToString().Substring(6);
             }
-            else if (e.Key==Key.Add) {
+            else if (e.Key == Key.Add)
+            {
                 number = "+";
             }
 
@@ -69,8 +71,8 @@ namespace ProjektLab
             Button btn = sender as Button;
             //tbkPolinom.Text +=btn.Content.ToString();
             tbkPolinom.Inlines.Add(new Run(btn.Content.ToString()));
-            
-            
+
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) { }
@@ -103,7 +105,7 @@ namespace ProjektLab
         {
             try
             {
-                
+
 
                 tbkPolinom.Text += "x";
                 Run run = new Run();
@@ -120,29 +122,32 @@ namespace ProjektLab
 
         private void btnPol_Click(object sender, RoutedEventArgs e)
         {
-            try {
+            try
+            {
 
-             //   if (btnPol.Content.ToString() == "Polinom") {
-                    btnPol.Content = "Művelet";
-                    foreach (Inline il in tbkPolinom.Inlines) {
-                        Run run = new Run();
-                        TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
-                        run.Text = tr.Text;
-                        run.BaselineAlignment = il.BaselineAlignment;        
-                         
-                        tbkPol1.Inlines.Add(run);
-                    }
-                
- 
-          //      }
-            
-        }
+                //   if (btnPol.Content.ToString() == "Polinom") {
+                btnPol.Content = "Művelet";
+                foreach (Inline il in tbkPolinom.Inlines)
+                {
+                    Run run = new Run();
+                    TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
+                    run.Text = tr.Text;
+                    run.BaselineAlignment = il.BaselineAlignment;
+
+                    tbkPol1.Inlines.Add(run);
+                }
+
+
+                //      }
+
+            }
             catch (Exception ex) { }
         }
 
-        private void btnclipBoard_Click(object sender, RoutedEventArgs e) {
-            ClsPolinom.Polinom polinom=new ClsPolinom.Polinom();
-            polinom= ClsPolinom.Polinom.PolinomFromString(Clipboard.GetText());
+        private void btnclipBoard_Click(object sender, RoutedEventArgs e)
+        {
+            ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
+            polinom = ClsPolinom.Polinom.PolinomFromString(Clipboard.GetText());
             polinom = ClsPolinom.Polinom.Sorter(polinom);
         }
 
@@ -157,7 +162,7 @@ namespace ProjektLab
                 displayPolinom(polinom);
 
             }
-       }
+        }
 
         private void displayPolinom(ClsPolinom.Polinom polinom)
         {
@@ -188,16 +193,16 @@ namespace ProjektLab
             }
 
 
-    }
+        }
 
 
 
-            private void equal_Click(object sender, RoutedEventArgs e)
+        private void equal_Click(object sender, RoutedEventArgs e)
         {
-            
+
             try
             {
-                ClsPolinom.Polinom polinom=new ClsPolinom.Polinom();
+                ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
                 /*
                 string pol="";
 
@@ -236,10 +241,10 @@ namespace ProjektLab
                 Pol7 = ClsPolinom.Polinom.calcPolinomToZp(Pol6, 7);
                 string s = Pol7.ToString();
                 */
-                
-                List<ClsPolinom.Polinom> irreducible=new List<ClsPolinom.Polinom>();
+
+                List<ClsPolinom.Polinom> irreducible = new List<ClsPolinom.Polinom>();
                 //irreducible = ClsPolinom.Polinom.getIrreducible(1, 2);
-               //irreducible = ClsPolinom.Polinom.getIrreducible(1, 3);
+                //irreducible = ClsPolinom.Polinom.getIrreducible(1, 3);
                 //irreducible = ClsPolinom.Polinom.getIrreducible(4, 2);
                 irreducible = ClsPolinom.Polinom.getIrreducible(4, 3);
 
@@ -257,6 +262,6 @@ namespace ProjektLab
         }
     }
 
-   
+
 
 }
