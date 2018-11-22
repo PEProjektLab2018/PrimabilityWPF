@@ -24,12 +24,14 @@ namespace ProjektLab
     {
         public Order MyOrder { get; set; }
         public ClsPolinom.Polinom IrreduciblePolinom { get; set; }
+        public FiniteFieldTableViewModel SummationTable { get; set; }
 
         public FiniteField()
         {
             InitializeComponent();
 
             MyOrder = new Order(0, 0);
+            SummationTable = new FiniteFieldTableViewModel();
 
             DataContext = this;
             polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(unchecked((int) MyOrder.Exponent), unchecked((int) MyOrder.Mantissa));
@@ -101,21 +103,28 @@ namespace ProjektLab
 
             DataGridTextColumn plusSign = new DataGridTextColumn();
             plusSign.Header = "+";
+            Binding plusBinding = new Binding("Label");
+            plusBinding.Converter = new PolinomToXamlConverter();
+            plusSign.Binding = plusBinding;
             SummationGrid.Columns.Add(plusSign);
             DataGridTextColumn multiplySign = new DataGridTextColumn();
             multiplySign.Header = "*";
             MultiplicationGrid.Columns.Add(multiplySign);
 
-
+            int i = 0;
             foreach (ClsPolinom.Polinom polinom in columns)
             {
+                SummationTable.createRow(columns.Count());
                 DataGridTextColumn columnSum = new DataGridTextColumn();
                 columnSum.Header = getPolinomTextBlock(polinom);
+                columnSum.Binding = new Binding(String.Format("Polinoms[{0}]", i));
                 SummationGrid.Columns.Add(columnSum);
+                SummationTable.Rows[i].Label = polinom;
 
                 DataGridTextColumn columnMul = new DataGridTextColumn();
                 columnMul.Header = getPolinomTextBlock(polinom);
                 MultiplicationGrid.Columns.Add(columnMul);
+                i++;
             }
 
             TableButtonSpinner.Visibility = Visibility.Hidden;

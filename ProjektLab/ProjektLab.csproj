@@ -76,11 +76,13 @@
     <Compile Include="FiniteField.xaml.cs">
       <DependentUpon>FiniteField.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FiniteFieldTableViewModel.cs" />
     <Compile Include="GreaterThanZeroValidationRule.cs" />
     <Compile Include="MyNumber.cs" />
     <Compile Include="Polinom.xaml.cs">
       <DependentUpon>Polinom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PolinomToXamlConverter.cs" />
     <Compile Include="PrimeValidationRule.cs" />
     <Compile Include="StringToUint64ValidationRule.cs" />
     <Page Include="FiniteField.xaml">

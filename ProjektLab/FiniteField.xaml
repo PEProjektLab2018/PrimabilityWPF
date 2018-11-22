@@ -6,7 +6,7 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local="clr-namespace:ProjektLab"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800" Width="Auto" Height="Auto" Background="White"
+             d:DesignHeight="600" d:DesignWidth="1024" Width="Auto" Height="Auto" Background="White"
              >
     <StackPanel>
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
@@ -96,12 +96,12 @@
                 </StackPanel>
             </Button>
         </Grid>
-        <TabControl Visibility="hidden" Width="800" Name="ResultGrid">
-            <TabItem Header="Összeadás" HorizontalAlignment="Center">
-                <DataGrid Name="SummationGrid" FrozenColumnCount="1">
+        <TabControl Visibility="hidden" Width="1000" Name="ResultGrid">
+            <TabItem Header="Összeadás">
+                <DataGrid Name="SummationGrid" FrozenColumnCount="1" ItemsSource="{Binding SummationTable.Rows}">
                 </DataGrid>
             </TabItem>
-            <TabItem Header="Szorzás" HorizontalAlignment="Center">
+            <TabItem Header="Szorzás">
                 <DataGrid Name="MultiplicationGrid" FrozenColumnCount="1">
                 </DataGrid>
             </TabItem>

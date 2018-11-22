@@ -447,7 +447,6 @@ namespace ClsPolinom
             int i = 0;
             foreach (Monom m in list)
             {
-
                 if (m.Coefficient != 0)
                 {
                     if (i > 0 && m.Coefficient > 0) { ret += "+"; }
@@ -469,9 +468,12 @@ namespace ClsPolinom
 
 
                 }
-
                 i++;
 
+            }
+            if (ret == "")
+            {
+                ret = "0";
             }
             return ret.Trim(new Char[] { ' ', '+' });
         }
