@@ -142,7 +142,7 @@ namespace ClsPolinom
         {
             Polinom Polinom2Neg = new Polinom();
 
-            foreach(Monom m in Polinom2)
+            foreach(Monom m in Polinom2.List)
             {
                 Polinom2Neg.add(new Monom((-1) * m.Coefficient, m.Exponent));
             }
