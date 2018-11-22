@@ -100,7 +100,7 @@ namespace ClsPolinom
                     break;
                 }
 
-                if (maxDivisor.Exponent <= maxDividend.Exponent)
+                if (dividend.List.Count() > 0 && maxDivisor.Exponent <= maxDividend.Exponent)
                 {
 
                     //1. dividing monoms

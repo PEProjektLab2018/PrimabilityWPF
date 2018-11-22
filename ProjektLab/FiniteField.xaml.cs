@@ -45,19 +45,6 @@ namespace ProjektLab
 
             polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
             DataContext = this;
-
-            /*ClsPolinom.Polinom a, b, r;
-            a = new ClsPolinom.Polinom();
-            b = new ClsPolinom.Polinom();
-            r = new ClsPolinom.Polinom();
-
-            r.add(new Monom(1, 1)).add(new Monom(1, 0));
-
-            a.add(new Monom(1, 1)).add(new Monom(1, 0));
-            b.add(new Monom(1, 1));
-
-            ClsPolinom.Polinom t = (b + a) % r;
-            ClsPolinom.Polinom t2 = b % r;*/
         }
 
         private void primeError(object sender, ValidationErrorEventArgs e)
@@ -113,7 +100,20 @@ namespace ProjektLab
             List<ClsPolinom.Polinom> list = await Task.Run<List<ClsPolinom.Polinom>>(() =>
             {
                 IrreducibleThread = Thread.CurrentThread;
-                return ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
+                List<ClsPolinom.Polinom> tmpList = ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
+
+                List<ClsPolinom.Polinom> result = new List<ClsPolinom.Polinom>();
+
+                // Use only Given exponent polinoms
+                foreach (ClsPolinom.Polinom p in tmpList)
+                {
+                    if((int) ClsPolinom.Polinom.Sorter(p).List[0].Exponent == MyOrder.Exponent)
+                    {
+                        result.Add(p);
+                    }
+                }
+
+                return result;
             });
             polinom.ItemsSource = list;
             IrreducibleThread = null;
@@ -182,15 +182,15 @@ namespace ProjektLab
                     ClsPolinom.Polinom colPolinom = SummationTable.Rows[j].Label;
                     await Task.Run(() =>
                     {
-                        SummationTable.Rows[i].Polinoms[j] = rowPolinom + colPolinom;
-                        //SummationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom + colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
+                        //SummationTable.Rows[i].Polinoms[j] = rowPolinom + colPolinom;
+                        SummationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom + colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
                     });
                     SummationGrid.ItemsSource = null;
                     SummationGrid.ItemsSource = SummationTable.Rows;
                     await Task.Run(() =>
                     {
-                        MultiplicationTable.Rows[i].Polinoms[j] = rowPolinom * colPolinom;
-                        //MultiplicationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom * colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
+                        //MultiplicationTable.Rows[i].Polinoms[j] = rowPolinom * colPolinom;
+                        MultiplicationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom * colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
                     });
                     MultiplicationGrid.ItemsSource = null;
                     MultiplicationGrid.ItemsSource = MultiplicationTable.Rows;
