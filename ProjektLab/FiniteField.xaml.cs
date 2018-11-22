@@ -44,6 +44,20 @@ namespace ProjektLab
 
             polinom.ItemsSource = ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
             DataContext = this;
+
+            /*
+             * TESTING
+            ClsPolinom.Polinom a, b, r;
+            a = new ClsPolinom.Polinom();
+            b = new ClsPolinom.Polinom();
+            r = new ClsPolinom.Polinom();
+
+            r.add(new Monom(1, 3)).add(new Monom(1, 1)).add(new Monom(1, 0));
+
+            a.add(new Monom(1, 1)).add(new Monom(1, 0));
+            b.add(new Monom(1, 2));
+            */
+            
         }
 
         private void primeError(object sender, ValidationErrorEventArgs e)

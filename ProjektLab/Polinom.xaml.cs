@@ -217,43 +217,43 @@ namespace ProjektLab
                 polinom = ClsPolinom.Polinom.PolinomFromString(pol);
                
                 */
-                /*
+                
                 ClsPolinom.Polinom pol1 = new ClsPolinom.Polinom();
                 ClsPolinom.Polinom pol2 = new ClsPolinom.Polinom();
-
-                pol1 = ClsPolinom.Polinom.PolinomFromString("5x2+2x+5");
-                pol2= ClsPolinom.Polinom.PolinomFromString("x+1");
-
+                
+                pol1 = ClsPolinom.Polinom.PolinomFromString("4x^3+2x^2-3x+5");
+                pol2= ClsPolinom.Polinom.PolinomFromString("x-1");
+/*
                 ClsPolinom.Polinom Pol3 = new ClsPolinom.Polinom();
 
                 Pol3 = pol1 * pol2;
-
+                */
                 ClsPolinom.Polinom Pol4 = new ClsPolinom.Polinom();
                 Pol4 = ClsPolinom.Polinom.Sorter(pol2);
                 ClsPolinom.Polinom Pol5 = new ClsPolinom.Polinom();
 
                 Pol5 = pol1/ pol2;
-
+                /*
                 ClsPolinom.Polinom Pol6 = new ClsPolinom.Polinom();
                 ClsPolinom.Polinom Pol7 = new ClsPolinom.Polinom();
 
                 Pol6 = ClsPolinom.Polinom.PolinomFromString("19x2+27x+8");
                 Pol7 = ClsPolinom.Polinom.calcPolinomToZp(Pol6, 7);
                 string s = Pol7.ToString();
-                */
+                
 
                 List<ClsPolinom.Polinom> irreducible = new List<ClsPolinom.Polinom>();
                 //irreducible = ClsPolinom.Polinom.getIrreducible(1, 2);
                 //irreducible = ClsPolinom.Polinom.getIrreducible(1, 3);
                 //irreducible = ClsPolinom.Polinom.getIrreducible(4, 2);
-                irreducible = ClsPolinom.Polinom.getIrreducible(4, 3);
+               // irreducible = ClsPolinom.Polinom.getIrreducible(4, 3);
 
                 //ClsPolinom.Polinom pol8 = new ClsPolinom.Polinom();
                 //pol8 = ClsPolinom.Polinom.Pow(ClsPolinom.Polinom.PolinomFromString("x+1"), 0);
-                //ClsPolinom.Polinom pol9 = new ClsPolinom.Polinom();
+               // ClsPolinom.Polinom pol9 = new ClsPolinom.Polinom();
                 //pol9 = ClsPolinom.Polinom.Pow(ClsPolinom.Polinom.PolinomFromString("x+1"), 1);
 
-
+    */
 
 
             }

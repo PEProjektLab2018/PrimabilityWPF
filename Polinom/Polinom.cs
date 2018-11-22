@@ -90,7 +90,7 @@ namespace ClsPolinom
                     break;
                 }
 
-                if (maxDivisor.Exponent <= maxDividend.Exponent)
+                if (maxDivisor.Exponent <= maxDividend.Exponent && maxDividend.Coefficient!=0)
                 {
 
                     //1. dividing monoms
@@ -116,91 +116,30 @@ namespace ClsPolinom
         public static Polinom operator +(Polinom Polinom1, Polinom Polinom2)
         {
             Polinom pol = new Polinom();
-            bool added, found;
 
-            foreach (Monom m1 in Polinom1.List)
+            var newMonomList = new List<Monom>();
+
+            newMonomList.AddRange(Polinom1.List);
+            newMonomList.AddRange(Polinom2.List);
+
+            foreach (Monom m in newMonomList)
             {
-                added = false;
-                foreach (Monom m2 in Polinom2.List)
-                {
-                    if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent)
-                    {
-                        pol.add(new Monom(m1.Coefficient + m2.Coefficient, m1.Variable, m1.Exponent));
-                        added = true;
-                    }
-
-                }
-                if (added == false)
-                {
-                    pol.add(m1);
-                }
+                if (m.Coefficient != 0) { pol.add(m); }
             }
 
-            foreach (Monom m2 in Polinom2)
-            {
-                found = false;
-                foreach (Monom m1 in Polinom1)
-                {
-                    if (m2.Variable == m1.Variable && m2.Exponent == m1.Exponent)
-                    {
-                        found = true;
-                    }
-                }
-                if (found == false)
-                {
-                    pol.add(m2);
-                }
-
-            }
-
-
-            return pol;
+            return Sorter(pol);
         }
 
         public static Polinom operator -(Polinom Polinom1, Polinom Polinom2)
         {
-            Polinom pol = new Polinom();
+            Polinom Polinom2Neg = new Polinom();
 
-            bool substracted, found;
-
-            foreach (Monom m1 in Polinom1.List)
+            foreach(Monom m in Polinom2.List)
             {
-                substracted = false;
-                foreach (Monom m2 in Polinom2.List)
-                {
-                    if (m1.Variable == m2.Variable && m1.Exponent == m2.Exponent)
-                    {
-                        if (m1.Coefficient != m2.Coefficient)
-                        {
-                            pol.add(new Monom(m1.Coefficient - m2.Coefficient, m1.Variable, m1.Exponent));
-                        }
-                        substracted = true;
-                    }
-
-                }
-                if (substracted == false)
-                {
-                    pol.add(m1);
-                }
+                Polinom2Neg.add(new Monom((-1) * m.Coefficient, m.Exponent));
             }
 
-            foreach (Monom m2 in Polinom2.List)
-            {
-                found = false;
-                foreach (Monom m1 in Polinom1.List)
-                {
-                    if (m2.Variable == m1.Variable && m2.Exponent == m1.Exponent)
-                    {
-                        found = true;
-                    }
-                }
-                if (found == false)
-                {
-                    pol.add(new Monom((m2.Coefficient) * (-1), m2.Variable, m2.Exponent));
-                }
-
-            }
-            return pol;
+            return Polinom1 + Polinom2Neg;
         }
 
         public static Polinom operator *(Polinom Polinom1, Polinom Polinom2)
@@ -482,10 +421,21 @@ namespace ClsPolinom
         {
             Monom m;
             Regex regex;
+            Regex regex2;
             Match match;
+            Match match2;
             Polinom retPolinom = new Polinom();
-
+            List<string> listInput = new List<string>();
             //ulong intResult;
+
+            regex2 = new Regex(@"([+-]?(?:(?:\d+x\^\d+)|(?:\d+x)|(?:\d+)|(?:x)))");
+            match2 = regex2.Match(input);
+
+            while (match2.Success) {
+                listInput.Add(match2.Value.ToString());
+                match2 = match2.NextMatch();
+            }
+
             string[] arrinput = input.Split('-', '+');
             for (int i = 0; i < arrinput.Count(); i++)
             {
