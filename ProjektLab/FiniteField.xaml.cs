@@ -55,7 +55,7 @@ namespace ProjektLab
             }
             else
             {
-                ((Control)sender).ToolTip = "";
+                ((Control)sender).ToolTip = null;
             }
 
             updateButtonState();
@@ -69,16 +69,23 @@ namespace ProjektLab
             }
             else
             {
-                ((Control)sender).ToolTip = "";
+                ((Control)sender).ToolTip = null;
             }
 
             updateButtonState();
+        }
+
+        private void MyOrderSourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            polinom.ItemsSource = null;
+            TableButton.IsEnabled = false;
         }
 
         private void updateButtonState()
         {
             if (Validation.GetHasError(powerInput) || Validation.GetHasError(primeInput))
             {
+                polinom.ItemsSource = null;
                 Button.IsEnabled = false;
             }
             else
@@ -250,6 +257,8 @@ namespace ProjektLab
 
             FrameworkElementFactory labelFactory = new FrameworkElementFactory(typeof(Label));
             labelFactory.SetBinding(Label.ContentProperty, binding);
+            labelFactory.SetValue(Label.VerticalAlignmentProperty, VerticalAlignment.Bottom);
+            labelFactory.SetValue(Label.HorizontalContentAlignmentProperty, HorizontalAlignment.Right);
             DataTemplate template = new DataTemplate();
             template.VisualTree = labelFactory;
 
