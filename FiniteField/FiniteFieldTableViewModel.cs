@@ -4,32 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClsPolinom;
-using System.Collections.ObjectModel;
 
-namespace ProjektLab
+namespace FiniteFieldLibrary
 {
     public class FiniteFieldTableViewModel
     {
         public class Row
         {
-            public List<ClsPolinom.Polinom> Polinoms { get; set; }
-            public ClsPolinom.Polinom Label { get; set; }
+            public List<Polinom> Polinoms { get; set; }
+            public Polinom Label { get; set; }
 
             public Row(int count)
             {
-                Polinoms = new List<ClsPolinom.Polinom>(count);
+                Polinoms = new List<Polinom>(count);
                 for (int i = 0; i < count; i++)
                 {
                     Polinoms.Add(null);
                 }
             }
 
-            override
-            public string ToString()
+            public override string ToString()
             {
                 string res = Label.ToString();
 
-                foreach(ClsPolinom.Polinom pol in Polinoms)
+                foreach (Polinom pol in Polinoms)
                 {
                     res += ";" + pol.ToString();
                 }
@@ -59,9 +57,21 @@ namespace ProjektLab
         {
             List<string> res = new List<string>(Rows.Count());
 
-            foreach(Row row in Rows)
+            foreach (Row row in Rows)
             {
                 res.Add(row.Label.ToString());
+            }
+
+            return res;
+        }
+
+        public List<Polinom> GetLabelPolinoms()
+        {
+            List<Polinom> res = new List<Polinom>(Rows.Count());
+
+            foreach (Row row in Rows)
+            {
+                res.Add(row.Label);
             }
 
             return res;

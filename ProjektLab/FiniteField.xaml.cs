@@ -107,20 +107,7 @@ namespace ProjektLab
             List<ClsPolinom.Polinom> list = await Task.Run<List<ClsPolinom.Polinom>>(() =>
             {
                 IrreducibleThread = Thread.CurrentThread;
-                List<ClsPolinom.Polinom> tmpList = ClsPolinom.Polinom.getIrreducible(MyOrder.Exponent, MyOrder.Mantissa);
-
-                List<ClsPolinom.Polinom> result = new List<ClsPolinom.Polinom>();
-
-                // Use only Given exponent polinoms
-                foreach (ClsPolinom.Polinom p in tmpList)
-                {
-                    if((int) ClsPolinom.Polinom.Sorter(p).List[0].Exponent == MyOrder.Exponent)
-                    {
-                        result.Add(p);
-                    }
-                }
-
-                return result;
+                return FiniteFieldLibrary.FiniteField.generateIrreduciblePolinoms(MyOrder);
             });
             polinom.ItemsSource = list;
             IrreducibleThread = null;
@@ -149,7 +136,6 @@ namespace ProjektLab
             MultiplicationGrid.Columns.Clear();
             MultiplicationGrid.ItemsSource = MultiplicationTable.Rows;
 
-
             generateTablesAsync();
         }
 
@@ -160,6 +146,7 @@ namespace ProjektLab
                 ResultGrid.Dispatcher.Invoke(() => { 
                     List<ClsPolinom.Polinom> columns = FiniteFieldLibrary.FiniteField.generateMembers(MyOrder);
 
+                    //Prepare tables representation
                     int i = 0;
                     foreach (ClsPolinom.Polinom polinom in columns)
                     {
@@ -177,33 +164,34 @@ namespace ProjektLab
             });
             ResultGrid.Visibility = Visibility.Visible;
 
-            int calcSize = (int)Math.Pow(MyOrder.Mantissa, MyOrder.Exponent);
-            for (int i = 0; i < calcSize; i++)
+            await Task.Run(() =>
             {
-                ClsPolinom.Polinom rowPolinom = SummationTable.Rows[i].Label;
-                for (int j = 0; j < calcSize; j++)
+                FiniteFieldLibrary.FiniteField.calculateTables(SummationTable.GetLabelPolinoms(), MyOrder, IrreduciblePolinom, ( (ClsPolinom.Polinom res, int i, int j) =>
                 {
-                    ClsPolinom.Polinom colPolinom = SummationTable.Rows[j].Label;
-                    await Task.Run(() =>
+                    SummationTable.Rows[i].Polinoms[j] = res;
+                    ResultGrid.Dispatcher.Invoke(() =>
                     {
-                        //SummationTable.Rows[i].Polinoms[j] = rowPolinom + colPolinom;
-                        SummationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom + colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
+                        SummationGrid.ItemsSource = null;
+                        SummationGrid.ItemsSource = SummationTable.Rows;
                     });
-                    SummationGrid.ItemsSource = null;
-                    SummationGrid.ItemsSource = SummationTable.Rows;
-                    await Task.Run(() =>
+                }), ((ClsPolinom.Polinom res, int i, int j) =>
+                {
+                    MultiplicationTable.Rows[i].Polinoms[j] = res;
+                    ResultGrid.Dispatcher.Invoke(() =>
                     {
-                        //MultiplicationTable.Rows[i].Polinoms[j] = rowPolinom * colPolinom;
-                        MultiplicationTable.Rows[i].Polinoms[j] = ClsPolinom.Polinom.calcPolinomToZp((rowPolinom * colPolinom) % IrreduciblePolinom, MyOrder.Mantissa);
+                        MultiplicationGrid.ItemsSource = null;
+                        MultiplicationGrid.ItemsSource = MultiplicationTable.Rows;
                     });
-                    MultiplicationGrid.ItemsSource = null;
-                    MultiplicationGrid.ItemsSource = MultiplicationTable.Rows;
-                }
-            }
-
-            TableButtonSpinner.Visibility = Visibility.Hidden;
-            TableButton.IsEnabled = true;
-            enableExportButtons();
+                }), () =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        TableButtonSpinner.Visibility = Visibility.Hidden;
+                        TableButton.IsEnabled = true;
+                        enableExportButtons();
+                    });
+                });
+            });
         }
 
         private static TextBlock getPolinomTextBlock(ClsPolinom.Polinom polinom)
