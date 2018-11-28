@@ -252,7 +252,7 @@ namespace ProjektLab
             }
             else
             {
-                ((Control)sender).ToolTip = "";
+                ((Control)sender).ToolTip = null;
                 Button.IsEnabled = true;
             }
         }

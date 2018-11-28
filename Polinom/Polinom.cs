@@ -19,11 +19,19 @@ namespace ClsPolinom
 
         public Polinom(List<Monom> L)
         {
-            this.list = L;
+            this.list = new List<Monom>(L.Count());
+            foreach (Monom m in L)
+            {
+                this.add(new Monom(m));
+            }
         }
         public Polinom(Polinom P)
         {
-            this.list = P.list;
+            this.list = new List<Monom>(P.list.Count());
+            foreach(Monom m in P.list)
+            {
+                this.add(new Monom(m));
+            }
         }
 
         public class Enumerator
@@ -57,8 +65,10 @@ namespace ClsPolinom
             }
             else
             {
-                this.list.Add(monom);
-
+                if (monom.Coefficient != 0)
+                {
+                    this.list.Add(monom);
+                }
             }
             return this;
         }
@@ -90,7 +100,7 @@ namespace ClsPolinom
                     break;
                 }
 
-                if (maxDivisor.Exponent <= maxDividend.Exponent && maxDividend.Coefficient!=0)
+                if (dividend.List.Count() > 0 && maxDivisor.Exponent <= maxDividend.Exponent)
                 {
 
                     //1. dividing monoms
@@ -124,7 +134,7 @@ namespace ClsPolinom
 
             foreach (Monom m in newMonomList)
             {
-                if (m.Coefficient != 0) { pol.add(m); }
+                pol.add(new Monom(m));
             }
 
             return Sorter(pol);
@@ -421,21 +431,10 @@ namespace ClsPolinom
         {
             Monom m;
             Regex regex;
-            Regex regex2;
             Match match;
-            Match match2;
             Polinom retPolinom = new Polinom();
-            List<string> listInput = new List<string>();
+
             //ulong intResult;
-
-            regex2 = new Regex(@"([+-]?(?:(?:\d+x\^\d+)|(?:\d+x)|(?:\d+)|(?:x)))");
-            match2 = regex2.Match(input);
-
-            while (match2.Success) {
-                listInput.Add(match2.Value.ToString());
-                match2 = match2.NextMatch();
-            }
-
             string[] arrinput = input.Split('-', '+');
             for (int i = 0; i < arrinput.Count(); i++)
             {

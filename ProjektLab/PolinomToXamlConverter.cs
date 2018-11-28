@@ -20,6 +20,8 @@ namespace ProjektLab
             {
                 TextBlock tbkPolinom = new TextBlock();
 
+                tbkPolinom.Padding = new Thickness(6, 2, 6, 2);
+
                 int i = 0;
                 foreach (ClsPolinom.Monom m in ((ClsPolinom.Polinom)value).List)
                 {

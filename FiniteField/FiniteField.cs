@@ -53,6 +53,52 @@ namespace FiniteFieldLibrary
             return Polinoms;
         }
 
+        public static List<Polinom> generateIrreduciblePolinoms(Order order)
+        {
+            return generateIrreduciblePolinoms(order.Exponent, order.Mantissa);
+        }
 
+        public static List<Polinom> generateIrreduciblePolinoms(int power, int p)
+        {
+            List<Polinom> tmpList = Polinom.getIrreducible(power, p);
+
+            List<Polinom> result = new List<Polinom>();
+
+            // Use only Given exponent polinoms
+            foreach (Polinom pol in tmpList)
+            {
+                if ((int)Polinom.Sorter(pol).List[0].Exponent == power)
+                {
+                    result.Add(pol);
+                }
+            }
+
+            return result;
+        }
+    
+        public static async void calculateTables(List<Polinom> columns, Order order, Polinom IrreduciblePolinom, Action<Polinom, int, int> summationCallback, Action<Polinom, int, int> multiplicationCallback, Action finalCallback)
+        {
+            int calcSize = (int)Math.Pow(order.Mantissa, order.Exponent);
+            for (int i = 0; i < calcSize; i++)
+            {
+                Polinom rowPolinom = columns[i];
+                for (int j = 0; j < calcSize; j++)
+                {
+                    Polinom colPolinom = columns[j];
+                    Polinom summationRes = await Task.Run<Polinom>(() =>
+                    {
+                        return Polinom.calcPolinomToZp((rowPolinom + colPolinom) % IrreduciblePolinom, order.Mantissa);
+                    });
+                    summationCallback(summationRes, i, j);
+                    Polinom multiplicationRes = await Task.Run<Polinom>(() =>
+                    {
+                        return Polinom.calcPolinomToZp((rowPolinom * colPolinom) % IrreduciblePolinom, order.Mantissa);
+                    });
+                    multiplicationCallback(summationRes, i, j);
+                }
+            }
+
+            finalCallback();
+        }
     }
 }

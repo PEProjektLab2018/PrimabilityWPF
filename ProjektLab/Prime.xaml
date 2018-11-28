@@ -71,7 +71,9 @@
                         Erastothenes teszt
                         <fa:FontAwesome Icon="InfoCircle">
                             <fa:FontAwesome.ToolTip>
-                                Leírás
+                                <TextBlock>
+                                    Szitamódszer
+                                </TextBlock>
                             </fa:FontAwesome.ToolTip>
                         </fa:FontAwesome>
                         :
@@ -88,7 +90,11 @@
                         Fermat teszt
                         <fa:FontAwesome Icon="InfoCircle">
                             <fa:FontAwesome.ToolTip>
-                                Leírás
+                                <TextBlock TextAlignment="Left">
+                                    A kis Fermat-tételen alapul, ami kimondja, hogy ha <Run FontStyle="Italic">p</Run> prím, 
+                                    akkor <Run FontStyle="Italic">a</Run><Run FontStyle="Italic" BaselineAlignment="Superscript">p-1</Run> kongruens 
+                                    <Run FontStyle="Italic">1</Run> mod <Run FontStyle="Italic">p</Run>, ha <Run FontStyle="Italic">p</Run> nem osztója <Run FontStyle="Italic">a</Run>-nak.
+                                </TextBlock>
                             </fa:FontAwesome.ToolTip>
                         </fa:FontAwesome>
                         :
@@ -105,7 +111,14 @@
                         Solovay-Strassen teszt
                         <fa:FontAwesome Icon="InfoCircle">
                             <fa:FontAwesome.ToolTip>
-                                Leírás
+                                <TextBlock TextAlignment="Left">
+                                    Egy adott páratlan <Run FontStyle="Italic">n</Run> számról a következőképpen döntjük el, hogy prím-e: választunk véletlenszerűen egy <Run FontStyle="Italic">0&lt;b&lt;n</Run> egész számot.<LineBreak/>
+                                    Ezután kiszámítjuk az euklideszi algoritmus segítségével a <Run FontStyle="Italic">(b, n)</Run> legnagyobb közös osztót. <LineBreak/>
+                                    Ha ez egynél nagyobb, akkor készen vagyunk: <Run FontStyle="Italic">n</Run> összetett szám. <LineBreak/>
+                                    Ha nem, akkor kiszámítjuk egyrészt <Run FontStyle="Italic">b</Run><Run FontStyle="Italic" BaselineAlignment="Superscript">(n-1)/2</Run> <Run FontStyle="Italic">n</Run>-nel vett legkisebb abszolút értékű maradékát, másrészt a : <Run FontStyle="Italic">(b/n)</Run> Jacobi-szimbólum értékét.<LineBreak/>
+                                    Ha <Run FontStyle="Italic">n</Run> prím, akkor a két értéknek, az Euler-kritérium értelmében, meg kell egyezni.<LineBreak/>
+                                    Ha <Run FontStyle="Italic">n</Run> összetett, akkor legfeljebb 1/2 annak a valószínűsége, hogy véletlen <Run FontStyle="Italic">b</Run>-re ez a két érték megegyezik.
+                                </TextBlock>
                             </fa:FontAwesome.ToolTip>
                         </fa:FontAwesome>
                         :
@@ -122,7 +135,13 @@
                         Miller-Rabin teszt
                         <fa:FontAwesome Icon="InfoCircle">
                             <fa:FontAwesome.ToolTip>
-                                Leírás
+                                <TextBlock TextAlignment="Left">
+                                    Legyen <Run FontStyle="Italic">n</Run> a tesztelendő páratlan szám, <Run FontStyle="Italic">n-1=2</Run><Run FontStyle="Italic" BaselineAlignment="Superscript">s</Run><Run FontStyle="Italic">t</Run>, <Run FontStyle="Italic">t</Run> páratlan. Legyen <Run FontStyle="Italic">0&lt;b&lt;n</Run>.<LineBreak/>
+                                    <Run FontStyle="Italic">b</Run><Run FontStyle="Italic" BaselineAlignment="Superscript">t</Run><Run FontStyle="Italic">&#8801;1</Run> (mod <Run FontStyle="Italic">n</Run>)
+                                    vagy van olyan <Run FontStyle="Italic">0&#8804;r&lt;s</Run>, hogy <Run FontStyle="Italic">b</Run><Run FontStyle="Italic" BaselineAlignment="Superscript">2^r*t</Run><Run FontStyle="Italic">&#8801;-1</Run>  (mod <Run FontStyle="Italic">n</Run>)<LineBreak/>
+                                    Ha <Run FontStyle="Italic">n</Run> prímszám, akkor a fenti állítás minden <Run FontStyle="Italic">b</Run>-re teljesül; ha <Run FontStyle="Italic">n</Run> összetett, akkor ez legfeljebb a <Run FontStyle="Italic">b</Run>-k egynegyedére igaz. <LineBreak/>
+                                    Ezért véletlenszerűen választunk <Run FontStyle="Italic">b</Run> értékeket, és ha mondjuk 100 egymásutáni választásra igaz a fenti állítás, akkor <Run FontStyle="Italic">n</Run> nagy valószínűséggel prím.
+                                </TextBlock>
                             </fa:FontAwesome.ToolTip>
                         </fa:FontAwesome>
                         :
@@ -139,7 +158,10 @@
                         Naív teszt
                         <fa:FontAwesome Icon="InfoCircle">
                             <fa:FontAwesome.ToolTip>
-                                Leírás
+                                <TextBlock TextAlignment="Left">
+                                    A legegyszerűbb módszer a következő: az adott egész számot sorra elosztjuk a nála határozottan kisebb pozitív egész számokkal.<LineBreak/>
+                                    Ha van ezek között olyan, 1-től különböző szám, ami az adott egész számnak osztója, akkor a szám nem prím; ellenben viszont, ha nincs, akkor ez a szám egy prímszám.
+                                </TextBlock>
                             </fa:FontAwesome.ToolTip>
                         </fa:FontAwesome>
                         :
@@ -159,7 +181,7 @@
                         <Label Name="FactorsResult" Visibility="Hidden"></Label>
                     </StackPanel>
                 </Label>
-                <Label Grid.Row="7" Grid.Column="0" Content="PrímHatvány:"/>
+                <Label Grid.Row="7" Grid.Column="0" Content="Prímhatvány:"/>
                 <Label Name="PrimePower" Grid.Row="7" Grid.Column="1">
                     <StackPanel Orientation="Horizontal">
                         <fa:FontAwesome Icon="Spinner" Spin="True" Name="PrimePowerSpinner" Visibility="Hidden"/>

@@ -33,6 +33,14 @@ namespace ClsPolinom
             this.Variable = "x";
         }
 
+        //Copy
+        public Monom(Monom m)
+        {
+            this.Coefficient = m.Coefficient;
+            this.Exponent = m.Exponent;
+            this.Variable = m.Variable;
+        }
+
         public long Coefficient { get; set; }
         public string Variable { get; set; }
         public ulong Exponent { get; set; }
