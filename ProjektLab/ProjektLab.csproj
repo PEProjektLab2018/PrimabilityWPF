@@ -175,5 +175,14 @@
   <ItemGroup>
     <Resource Include="mathop.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="eraser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="sponge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="floppy.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

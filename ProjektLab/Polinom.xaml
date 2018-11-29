@@ -33,21 +33,23 @@
         <TextBlock Text="Modulo" Grid.Row="2"></TextBlock>
         <TextBlock Name="tbkMod" Grid.Row="2" Grid.Column="1"></TextBlock>
         <TextBlock Name="tbkPol1" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="5"/>
-        <Button Grid.Column="2" Grid.Row="3" Name="btnClipboard" Click="btnclipBoard_Click">
+        <ListBox Name="lbLog" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="5"/>
+        <Button Grid.Column="2" Grid.Row="4" Name="btnClipboard" Click="btnclipBoard_Click" ToolTip="Polinom a vágólapról">
             <StackPanel>
                 <Image Source="clipboard.png"></Image>
             </StackPanel>
         </Button>
-        <Button Grid.Column="3" Grid.Row="3" Name="btnPol" Click="btnPol_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic" FontWeight="Bold" >
+        <Button Grid.Column="2" Grid.Row="3" Name="btnSave" Click="btnSave_click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic" FontWeight="Bold" ToolTip="Műveletválasztó" >
             <StackPanel>
-                <Image Source="mathop.png"></Image>
+                <Image Source="floppy.png"></Image>
             </StackPanel>
         </Button>
-        <Button Content="CE" Grid.Column="4" Grid.Row="3" FontFamily="Times New Roman" FontSize="22" FontWeight="Bold"></Button>
-        <Button Content="C" Grid.Column="5" Grid.Row="3" FontFamily="Times New Roman" FontSize="22"></Button>
-        <Button Content="BKSP" Grid.Column="6" Grid.Row="3" FontFamily="Times New Roman" FontSize="22"></Button>
-        <Button Content="/" Grid.Column="7" Grid.Row="3" FontFamily="Times New Roman" FontSize="22"></Button>
-        <Button Grid.Column="2" Grid.Row="4" Name="btnOpen" Click="btnOpen_Click">
+        <Button Content="CE" Grid.Column="3" Grid.Row="3" FontFamily="Times New Roman" FontSize="22" FontWeight="Bold"></Button>
+        <Button Content="C" Grid.Column="4" Grid.Row="3" FontFamily="Times New Roman" FontSize="22"></Button>
+        <Button Content="BKSP" Grid.Column="5" Grid.Row="3" FontFamily="Times New Roman" FontSize="22"></Button>
+        <Button Content="%" Grid.Column="6" Grid.Row="3" FontFamily="Times New Roman" FontSize="22" Click="btnFunct_click"></Button>
+        <Button Content="/" Grid.Column="7" Grid.Row="3" FontFamily="Times New Roman" FontSize="22" Click="btnFunct_click"></Button>
+        <Button Grid.Column="2" Grid.Row="5" Name="btnOpen" Click="btnOpen_Click" ToolTip="Polinom szövegfájlból">
             <StackPanel>
                 <Image Source="open-archive.png"></Image>
             </StackPanel>
@@ -56,9 +58,9 @@
         <Button Content="9" Grid.Column="4" Grid.Row="4" Name="btn_9" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
         <Button Content="8" Grid.Column="5" Grid.Row="4" Name="btn_8" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
         <Button Content="7" Grid.Column="6" Grid.Row="4" Name="btn_7" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22"></Button>
-        <Button Content="*" Grid.Column="7" Grid.Row="4" FontFamily="Palatino Linotype" FontSize="22" ></Button>
+        <Button Content="*" Grid.Column="7" Grid.Row="4" FontFamily="Palatino Linotype" FontSize="22" Click="btnFunct_click"></Button>
         <TextBlock Name="tbkOperation" Grid.Column="0" Grid.Row="5"/>
-        <Button Content="mod" Grid.Column="2" Grid.Row="5" FontFamily="Palatino Linotype" FontStyle="Italic" FontSize="22" Click="btnMod_click" ></Button>
+        <Button Content="mod" Grid.Column="2" Grid.Row="6" FontFamily="Palatino Linotype" FontStyle="Italic" FontSize="22" Click="btnMod_click" ></Button>
         <Button Grid.Column="3" Grid.Row="5" Click="Button_Click_square">
             <TextBlock FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic">
             <Run>x</Run>
@@ -68,7 +70,7 @@
         <Button Content="6" Grid.Column="4" Grid.Row="5" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
         <Button Content="5" Grid.Column="5" Grid.Row="5" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
         <Button Content="4" Grid.Column="6" Grid.Row="5" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
-        <Button Content="-" Grid.Column="7" Grid.Row="5" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
+        <Button Content="-" Grid.Column="7" Grid.Row="5" Click="btnFunct_click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
 
         <Button Grid.Column="3" Grid.Row="6" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic" Click="Button_Click_Cube">
             <TextBlock FontFamily="Palatino Linotype">
@@ -79,16 +81,25 @@
         <Button Content="3" Grid.Column="4" Grid.Row="6" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
         <Button Content="2" Grid.Column="5" Grid.Row="6" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
         <Button Content="1" Grid.Column="6" Grid.Row="6" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
-        <Button Content="+" Grid.Column="7" Grid.Row="6" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"/>
-
+        <Button Content="+" Grid.Column="7" Grid.Row="6" Click="btnFunct_click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"/>
+        <Button Grid.Column="2" Grid.Row="7" Name="btnEraseLog" Click="btnEraseLog_Click" ToolTip="Polinom szövegfájlból">
+            <StackPanel>
+                <Image Source="sponge.png"></Image>
+            </StackPanel>
+        </Button>
         <Button Grid.Column="3" Grid.Row="7" Click="Button_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic">
             <TextBlock FontFamily="Palatino Linotype">
             <Run>x</Run>
             <Run Typography.Variants="Superscript">y</Run>
             </TextBlock>
         </Button>
-        <Button Content="+/-" Grid.Column="4" Grid.Row="7" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
+        <Button Grid.Column="4" Grid.Row="7" Name="btnPol" Click="btnPol_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic" FontWeight="Bold" ToolTip="Műveletválasztó" >
+            <StackPanel>
+                <Image Source="mathop.png"></Image>
+            </StackPanel>
+        </Button>
         <Button Content="0" Grid.Column="5" Grid.Row="7" Click="btn_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
+        
         <Button Content="," Grid.Column="6" Grid.Row="7" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
         <Button Content="=" Grid.Column="7" Grid.Row="7" Click="equal_Click" FontFamily="Palatino Linotype" FontSize="22" FontStyle="Italic"></Button>
 

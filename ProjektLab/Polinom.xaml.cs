@@ -6,6 +6,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using ClsPolinom;
 using Microsoft.Win32;
+using System.IO;
 
 namespace ProjektLab
 {
@@ -21,14 +22,21 @@ namespace ProjektLab
             // DataContext = this;
         }
 
-        void btnMod_click(object sender, RoutedEventArgs e)
+        private ClsPolinom.Polinom poli1;
+        private ClsPolinom.Polinom poli2;
+        private ClsPolinom.Polinom resPoli;
+        private bool isFunction;
+        private char actFunction;
+
+
+        private void btnMod_click(object sender, RoutedEventArgs e)
         {
             tbkMod.Text = tbkPolinom.Text;
 
         }
 
 
-        void Polinom_KeyDown(object sender, KeyEventArgs e)
+        private void Polinom_KeyDown(object sender, KeyEventArgs e)
         {
 
             string number = "";
@@ -75,6 +83,43 @@ namespace ProjektLab
 
         }
 
+        private void btnFunct_click(object sender, RoutedEventArgs e) {
+            Button btn = sender as Button;
+
+            if (isFunction == true)
+            {
+
+                switch (btn.Content.ToString())
+                {
+                    case "+":
+                        actFunction = '+';
+                        break;
+                    case "-":
+                        actFunction = '-';
+                        break;
+                    case "*":
+                        actFunction = '*';
+                        break;
+                    case "/":
+                        actFunction = '/';
+                        break;
+                    case "%":
+                        actFunction = '%';
+                        break;
+                }
+                lbLog.Items.Add(new TextBlock(new Run(actFunction.ToString())));
+                tbkPolinom.Inlines.Clear();
+                isFunction = false;
+            }
+            else {
+                if (btn.Content.ToString() == "+" || btn.Content.ToString() == "-") {
+                    tbkPolinom.Inlines.Add(new Run(btn.Content.ToString()));
+                }
+            }
+        }
+
+       
+
         private void Button_Click(object sender, RoutedEventArgs e) { }
 
         private void Button_Click_square(object sender, RoutedEventArgs e)
@@ -88,12 +133,13 @@ namespace ProjektLab
                                     tbkPolinom.Inlines.Add(I);
                                 }
                                 */
-
-                tbkPolinom.Text += "x";
-                Run run = new Run();
-                run.Text = "2";
-                run.BaselineAlignment = BaselineAlignment.Superscript;
-                tbkPolinom.Inlines.Add(run);
+                Run run1 = new Run();
+                run1.Text = "x";
+                tbkPolinom.Inlines.Add(run1);
+                Run r = new Run();
+                r.Text = "2";
+                r.BaselineAlignment = BaselineAlignment.Superscript;
+                tbkPolinom.Inlines.Add(r);
             }
             catch (Exception ex) { }
 
@@ -106,12 +152,14 @@ namespace ProjektLab
             try
             {
 
-
-                tbkPolinom.Text += "x";
                 Run run = new Run();
-                run.Text = "3";
-                run.BaselineAlignment = BaselineAlignment.Superscript;
+                run.Text += "x";
                 tbkPolinom.Inlines.Add(run);
+
+                Run r2 = new Run();
+                r2.Text = "3";
+                r2.BaselineAlignment = BaselineAlignment.Superscript;
+                tbkPolinom.Inlines.Add(r2);
             }
             catch (Exception ex) { }
 
@@ -124,18 +172,24 @@ namespace ProjektLab
         {
             try
             {
-
-                //   if (btnPol.Content.ToString() == "Polinom") {
-                btnPol.Content = "Művelet";
+                string strPolinom="";
+                
+                isFunction = true;
+                
+                TextBlock tb = new TextBlock();
                 foreach (Inline il in tbkPolinom.Inlines)
                 {
                     Run run = new Run();
                     TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
                     run.Text = tr.Text;
+                    strPolinom += tr.Text;
                     run.BaselineAlignment = il.BaselineAlignment;
 
-                    tbkPol1.Inlines.Add(run);
+                    tb.Inlines.Add(run);
                 }
+                
+                if (poli1 == null) { poli1 = ClsPolinom.Polinom.PolinomFromString(strPolinom); }
+                lbLog.Items.Add(tb);
 
 
                 //      }
@@ -144,49 +198,110 @@ namespace ProjektLab
             catch (Exception ex) { }
         }
 
+        private ClsPolinom.Polinom PolinomFromTextBlock(TextBlock textBlock) {
+            ClsPolinom.Polinom retPolinom=new ClsPolinom.Polinom();
+            string strPolinom = "";
+          
+           // isFunction = true;
+            TextBlock tb = new TextBlock();
+            foreach (Inline il in tbkPolinom.Inlines)
+            {
+                Run run = new Run();
+                TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
+                run.Text = tr.Text;
+                strPolinom += tr.Text;
+                run.BaselineAlignment = il.BaselineAlignment;
+
+                tb.Inlines.Add(run);
+            }
+            retPolinom = ClsPolinom.Polinom.PolinomFromString(strPolinom);
+            return retPolinom;
+        }
+
+        private String stringFromTextBlock(TextBlock textBlock)
+        {
+          
+            string str = "";
+
+            // isFunction = true;
+           // TextBlock tb = new TextBlock();
+            foreach (Inline il in textBlock.Inlines)
+            {
+                Run run = new Run();
+                TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
+                run.Text = tr.Text;
+                run.BaselineAlignment = il.BaselineAlignment;
+                if (run.BaselineAlignment == BaselineAlignment.Superscript) {
+                    str += "^";
+                }
+                str += tr.Text;
+               
+            }
+            return str;
+
+        }
+
         private void btnclipBoard_Click(object sender, RoutedEventArgs e)
         {
-            ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
-            polinom = ClsPolinom.Polinom.PolinomFromString(Clipboard.GetText());
-            polinom = ClsPolinom.Polinom.Sorter(polinom);
+            try
+            {
+
+                ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
+                polinom = ClsPolinom.Polinom.PolinomFromString(Clipboard.GetText());
+                polinom = ClsPolinom.Polinom.Sorter(polinom);
+            }
+
+            catch  {
+                MessageBox.Show("A vágólap üres vagy érvénytelen adatot tartalmaz.","Hiba");
+            }
+
         }
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-            ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text Files (*.txt) | *.txt";
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                polinom = ClsPolinom.Polinom.PolinomFromString(System.IO.File.ReadAllText(openFileDialog.FileName));
-                displayPolinom(polinom);
+                ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Text Files (*.txt) | *.txt";
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    polinom = ClsPolinom.Polinom.PolinomFromString(System.IO.File.ReadAllText(openFileDialog.FileName));
+                    displayPolinom(polinom);
 
+                }
+            }
+            catch {
+                MessageBox.Show("A file nem tartalmaz polinomként értelmezhető karaktersorozatot.", "Hiba");
             }
         }
 
         private void displayPolinom(ClsPolinom.Polinom polinom)
         {
-            tbkPolinom.Text = "";
+            TextBlock tb = new TextBlock();
+           // tbkPolinom.Text = "";
             int i = 0;
             foreach (Monom m in polinom.List)
             {
-                if (i > 0 && m.Coefficient > 1) { tbkPolinom.Inlines.Add("+"); }
+                if (i > 0 && m.Coefficient > 1) { tb.Inlines.Add("+"); }
                 if (m.Coefficient > 1)
                 {
                     //tbkPolinom.Text += m.Coefficient;
-                    tbkPolinom.Inlines.Add(m.Coefficient.ToString());
+                    tb.Inlines.Add(m.Coefficient.ToString());
                 }
                 if (m.Exponent != 0)
                 {
                     //tbkPolinom.Text += m.Variable;
-                    tbkPolinom.Inlines.Add(m.Variable);
+                    tb.Inlines.Add(m.Variable);
                     if (m.Exponent > 1)
                     {
                         Run run = new Run();
                         run.Text = m.Exponent.ToString();
                         run.BaselineAlignment = BaselineAlignment.Superscript;
-                        tbkPolinom.Inlines.Add(run);
-
+                        tb.Inlines.Add(run);
+                      //  StackPanel sp = new StackPanel();
+                      //  sp.Children.Add(tb);
+                        lbLog.Items.Add(tb);
                     }
                 }
                 i++;
@@ -195,14 +310,48 @@ namespace ProjektLab
 
         }
 
+        private void btnEraseLog_Click(object sender, RoutedEventArgs e) {
+            lbLog.Items.Clear();
+        }
 
+        private void btnSave_click(object sender, RoutedEventArgs e) {
+
+
+            try
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "Szövegfájlok (*.txt) | *.txt";
+                if (sfd.ShowDialog() == true)
+                {
+                    StreamWriter sw = new StreamWriter(sfd.FileName);
+                    foreach (var i in lbLog.Items)
+                    {
+                        if (i.GetType().ToString() == "System.Windows.Controls.TextBlock")
+                        {
+                            string st = stringFromTextBlock((TextBlock)i);
+                            sw.WriteLine(st);
+                        }
+
+
+                    }
+                    sw.Close();
+                }
+
+            }
+            catch (Exception ex) {
+               MessageBox.Show(ex.Message);
+            }
+
+        }
 
         private void equal_Click(object sender, RoutedEventArgs e)
         {
 
             try
             {
-                ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
+
+               
+                //ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
                 /*
                 string pol="";
 
@@ -217,7 +366,7 @@ namespace ProjektLab
                 polinom = ClsPolinom.Polinom.PolinomFromString(pol);
                
                 */
-                
+                /*
                 ClsPolinom.Polinom pol1 = new ClsPolinom.Polinom();
                 ClsPolinom.Polinom pol2 = new ClsPolinom.Polinom();
                 
@@ -227,7 +376,11 @@ namespace ProjektLab
                 ClsPolinom.Polinom Pol3 = new ClsPolinom.Polinom();
 
                 Pol3 = pol1 * pol2;
+
+                
                 */
+
+                /*
                 ClsPolinom.Polinom Pol4 = new ClsPolinom.Polinom();
                 Pol4 = ClsPolinom.Polinom.Sorter(pol2);
                 ClsPolinom.Polinom Pol5 = new ClsPolinom.Polinom();
@@ -252,13 +405,51 @@ namespace ProjektLab
                 //pol8 = ClsPolinom.Polinom.Pow(ClsPolinom.Polinom.PolinomFromString("x+1"), 0);
                // ClsPolinom.Polinom pol9 = new ClsPolinom.Polinom();
                 //pol9 = ClsPolinom.Polinom.Pow(ClsPolinom.Polinom.PolinomFromString("x+1"), 1);
-
+                
     */
+                if (poli1 != null) {
+                    string strPolinom = "";
+                    
+                    isFunction = true;
+                    TextBlock tb = new TextBlock();
+                    foreach (Inline il in tbkPolinom.Inlines)
+                    {
+                        Run run = new Run();
+                        TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
+                        run.Text = tr.Text;
+                        strPolinom += tr.Text;
+                        run.BaselineAlignment = il.BaselineAlignment;
 
+                        tb.Inlines.Add(run);
+                    }
+                     poli2 = ClsPolinom.Polinom.PolinomFromString(strPolinom); 
+                    lbLog.Items.Add(tb);
+                }
+                lbLog.Items.Add(new TextBlock(new Run("=")));
+                switch (actFunction) {
+                    case '+':
+                        resPoli = poli1 + poli2;
+                        break;
+                    case '-':
+                        resPoli = poli1 - poli2;
+                        break;
+                    case '*':
+                        resPoli = poli1 * poli2;
+                        break;
+                    case '/':
+                        resPoli = poli1 / poli2;
+                        break;
+                }
+                //resPoli = poli1 + poli2;
+                displayPolinom(resPoli);
+                tbkPolinom.Inlines.Clear();
+                isFunction = false;
 
             }
 
-            catch (Exception ex) { }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 
