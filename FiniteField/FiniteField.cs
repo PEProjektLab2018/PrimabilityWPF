@@ -94,7 +94,7 @@ namespace FiniteFieldLibrary
                     {
                         return Polinom.calcPolinomToZp((rowPolinom * colPolinom) % IrreduciblePolinom, order.Mantissa);
                     });
-                    multiplicationCallback(summationRes, i, j);
+                    multiplicationCallback(multiplicationRes, i, j);
                 }
             }
 
