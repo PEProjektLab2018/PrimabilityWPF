@@ -20,6 +20,7 @@ namespace ProjektLab
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(Polinom_KeyDown);
             // DataContext = this;
+            isFunction = false;
         }
 
         private ClsPolinom.Polinom poli1;
@@ -174,7 +175,7 @@ namespace ProjektLab
             {
                 string strPolinom="";
                 
-                isFunction = true;
+                
                 
                 TextBlock tb = new TextBlock();
                 foreach (Inline il in tbkPolinom.Inlines)
@@ -188,7 +189,8 @@ namespace ProjektLab
                     tb.Inlines.Add(run);
                 }
                 
-                if (poli1 == null) { poli1 = ClsPolinom.Polinom.PolinomFromString(strPolinom); }
+                if (isFunction == false) { poli1 = ClsPolinom.Polinom.PolinomFromString(strPolinom); }
+                isFunction = true;
                 lbLog.Items.Add(tb);
 
 
@@ -278,13 +280,15 @@ namespace ProjektLab
 
         private void displayPolinom(ClsPolinom.Polinom polinom)
         {
+            if (polinom.List.Count==0) { lbLog.Items.Add(new Run("0")); }
             TextBlock tb = new TextBlock();
            // tbkPolinom.Text = "";
             int i = 0;
             foreach (Monom m in polinom.List)
             {
                 if (i > 0 && m.Coefficient > 1) { tb.Inlines.Add("+"); }
-                if (m.Coefficient > 1)
+                if ((m.Coefficient == 1 || m.Coefficient==0) && m.Exponent == 0) { tb.Inlines.Add(m.Coefficient.ToString()); }
+                    if (m.Coefficient > 1)
                 {
                     //tbkPolinom.Text += m.Coefficient;
                     tb.Inlines.Add(m.Coefficient.ToString());
@@ -301,17 +305,25 @@ namespace ProjektLab
                         tb.Inlines.Add(run);
                       //  StackPanel sp = new StackPanel();
                       //  sp.Children.Add(tb);
-                        lbLog.Items.Add(tb);
+                        
                     }
                 }
                 i++;
             }
-
+            lbLog.Items.Add(tb);
 
         }
 
         private void btnEraseLog_Click(object sender, RoutedEventArgs e) {
             lbLog.Items.Clear();
+        }
+
+        private void btnCE_click(object sender, RoutedEventArgs e) { tbkPolinom.Inlines.Clear(); }
+
+        private void btnC_click(object sender, RoutedEventArgs e) {
+            poli1.List.Clear();
+            poli2.List.Clear();
+            tbkPolinom.Inlines.Clear();
         }
 
         private void btnSave_click(object sender, RoutedEventArgs e) {
@@ -439,12 +451,16 @@ namespace ProjektLab
                     case '/':
                         resPoli = poli1 / poli2;
                         break;
+
+                    case '%':
+                        resPoli = poli1 % poli2;
+                        break;
                 }
                 //resPoli = poli1 + poli2;
                 displayPolinom(resPoli);
                 tbkPolinom.Inlines.Clear();
                 isFunction = false;
-
+                
             }
 
             catch (Exception ex) {
