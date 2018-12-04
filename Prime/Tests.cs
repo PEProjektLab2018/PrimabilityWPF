@@ -202,12 +202,42 @@ namespace Prime
             return n == 1 ? (ulong)j : 0;
         }
 
+        private static  long modPow(ulong a, ulong b, ulong c)
+        {
+            ulong res = 1;
+            for (int i = 0; i < (int)b; i++)
+            {
+                res *= a;
+                res %= c;
+            }
+            return Convert.ToInt64(res % c);
+        }
+
+        private static long Legandre(ulong a, ulong p)
+        {
+            if (a == 1)
+            {
+                return 1;
+            }
+            if (a % 2 == 0)
+            {
+                return Convert.ToInt64(Legandre(a / 2, p) * Math.Pow(-1, ((p * p) - 1) / 8));
+            }
+            if ((a % 2 != 0) && (a != 1))
+            {
+                return Convert.ToInt64(Legandre(p % a, a) * Math.Pow(-1, (a - 1) * (p - 1) / 4));
+            }
+            return 0;
+        }
+
+
         //Solovay–Strassen
         public static bool SolovayStrassen(ulong number, ulong chance)
         {
             ulong a;
             ulong gcd;
             ulong i;
+            ulong Jacobian;
             for (i = 0; i < chance; i++)
             {
                 a = generateRandomNumber(number);
@@ -216,7 +246,13 @@ namespace Prime
                 {
                     break;
                 }
-                if (Jacobi(a, number) == 0 || Math.Pow(a, (number - 1) / 2) % number != Jacobi(a, number)) { break; }
+                //if (Legandre(a, number) == 0 || ((Math.Pow(a, (number - 1) / 2)) % number) != (Legandre(a, number)))
+                //(n + Jacobi(a, n)) % n
+
+
+                if (Legandre(a, number) == 0 || modPow(a, (number - 1) / 2 , number) != (Convert.ToInt64(number)+Legandre(a, number))%Convert.ToInt64(number))
+                {
+                    break; }
             }
             return i == chance;
 
