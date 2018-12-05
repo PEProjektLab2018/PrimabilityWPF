@@ -28,12 +28,22 @@ namespace ProjektLab
         private ClsPolinom.Polinom resPoli;
         private bool isFunction;
         private char actFunction;
+        private int modulo = 0;
 
 
         private void btnMod_click(object sender, RoutedEventArgs e)
         {
-            tbkMod.Text = tbkPolinom.Text;
-
+            try
+            {
+                
+                modulo = Convert.ToInt16(tbkPolinom.Text);
+                if (modulo < 0) { throw new Exception(); }
+                if (modulo != 0) { tbkMod.Text = tbkPolinom.Text; } else { tbkMod.Text = ""; }
+                tbkPolinom.Inlines.Clear();
+            }
+            catch {
+                MessageBox.Show("A modulo értékének természetes számnak kell lennie!");
+            }
         }
 
 
@@ -189,7 +199,17 @@ namespace ProjektLab
                     tb.Inlines.Add(run);
                 }
                 
-                if (isFunction == false) { poli1 = ClsPolinom.Polinom.PolinomFromString(strPolinom); }
+                if (isFunction == false) {
+                    if (modulo == 0)
+                    {
+                        poli1 = ClsPolinom.Polinom.PolinomFromString(strPolinom);
+                    }
+
+                    else {
+                        poli1 = ClsPolinom.Polinom.calcPolinomToZp(ClsPolinom.Polinom.PolinomFromString(strPolinom),modulo);
+                    }
+
+                }
                 isFunction = true;
                 lbLog.Items.Add(tb);
 
@@ -280,13 +300,13 @@ namespace ProjektLab
 
         private void displayPolinom(ClsPolinom.Polinom polinom)
         {
-            if (polinom.List.Count==0) { lbLog.Items.Add(new Run("0")); }
+            if (polinom.List.Count == 0) { lbLog.Items.Add(new Run("0")); }
             TextBlock tb = new TextBlock();
-           // tbkPolinom.Text = "";
+            // tbkPolinom.Text = "";
             int i = 0;
             foreach (Monom m in polinom.List)
             {
-                if (i > 0 && m.Coefficient > 1) { tb.Inlines.Add("+"); }
+                if (i > 0 && (m.Coefficient > 1 || i<polinom.List.Count-1 )) { tb.Inlines.Add("+"); }
                 if ((m.Coefficient == 1 || m.Coefficient==0) && m.Exponent == 0) { tb.Inlines.Add(m.Coefficient.ToString()); }
                     if (m.Coefficient > 1)
                 {
@@ -434,7 +454,16 @@ namespace ProjektLab
 
                         tb.Inlines.Add(run);
                     }
-                     poli2 = ClsPolinom.Polinom.PolinomFromString(strPolinom); 
+
+                    if (modulo == 0)
+                    {
+                        poli2 = ClsPolinom.Polinom.PolinomFromString(strPolinom);
+                    }
+                    else
+                    {
+                        poli2 = ClsPolinom.Polinom.calcPolinomToZp(ClsPolinom.Polinom.PolinomFromString(strPolinom), modulo);
+                    }
+                   
                     lbLog.Items.Add(tb);
                 }
                 lbLog.Items.Add(new TextBlock(new Run("=")));
@@ -457,6 +486,8 @@ namespace ProjektLab
                         break;
                 }
                 //resPoli = poli1 + poli2;
+
+                if (modulo != 0) { resPoli = ClsPolinom.Polinom.calcPolinomToZp(resPoli, modulo); }
                 displayPolinom(resPoli);
                 tbkPolinom.Inlines.Clear();
                 isFunction = false;
