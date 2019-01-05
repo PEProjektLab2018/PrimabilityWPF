@@ -71,6 +71,7 @@
                     </ControlTemplate>
                 </Validation.ErrorTemplate>
             </TextBox>
+            <TextBox Name="tbTime" Grid.Row="0" Grid.Column="4"></TextBox>
             <Label Content="Irreducibilic polinom:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right">
             </Label>
             <ComboBox

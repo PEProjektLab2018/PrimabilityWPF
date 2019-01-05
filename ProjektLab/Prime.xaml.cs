@@ -29,7 +29,7 @@ namespace ProjektLab
         public Prime()
         {
             InitializeComponent();
-
+            
             MyNumber = new MyNumber();
             ThreadList = new List<Thread>();
 

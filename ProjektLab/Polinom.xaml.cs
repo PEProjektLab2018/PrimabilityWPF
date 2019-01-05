@@ -29,6 +29,8 @@ namespace ProjektLab
         private bool isFunction;
         private char actFunction;
         private int modulo = 0;
+        private bool isExponent = false;
+        private int exponent = 0;
 
 
         private void btnMod_click(object sender, RoutedEventArgs e)
@@ -88,8 +90,15 @@ namespace ProjektLab
         private void btn_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            //tbkPolinom.Text +=btn.Content.ToString();
-            tbkPolinom.Inlines.Add(new Run(btn.Content.ToString()));
+           
+            Run run = new Run();
+           
+            if (isExponent == true) {
+                run.BaselineAlignment = BaselineAlignment.Superscript;
+            }
+            run.Text = btn.Content.ToString();
+            tbkPolinom.Inlines.Add(run);
+          
 
 
         }
@@ -97,6 +106,10 @@ namespace ProjektLab
         private void btnFunct_click(object sender, RoutedEventArgs e) {
             Button btn = sender as Button;
 
+            if (isExponent == true) {
+                isExponent = false;  
+
+            }
             if (isFunction == true)
             {
 
@@ -178,6 +191,12 @@ namespace ProjektLab
 
         }
 
+        private void Button_Click_Exponent(object sender, RoutedEventArgs e) {
+            isExponent = true;
+            Run run = new Run(text: "x");
+            tbkPolinom.Inlines.Add(run);
+     
+        }
 
         private void btnPol_Click(object sender, RoutedEventArgs e)
         {
@@ -338,7 +357,10 @@ namespace ProjektLab
             lbLog.Items.Clear();
         }
 
-        private void btnCE_click(object sender, RoutedEventArgs e) { tbkPolinom.Inlines.Clear(); }
+        private void btnCE_click(object sender, RoutedEventArgs e) {
+            tbkPolinom.Inlines.Clear();
+            isExponent = false;
+        }
 
         private void btnC_click(object sender, RoutedEventArgs e) {
             poli1.List.Clear();
@@ -383,62 +405,7 @@ namespace ProjektLab
             {
 
                
-                //ClsPolinom.Polinom polinom = new ClsPolinom.Polinom();
-                /*
-                string pol="";
-
-                foreach (Inline il in tbkPolinom.Inlines)
-                {
-                    
-                    TextRange tr = new TextRange(il.ContentStart, il.ContentEnd);
-                    pol += tr.Text;
-                }
-
-
-                polinom = ClsPolinom.Polinom.PolinomFromString(pol);
-               
-                */
-                /*
-                ClsPolinom.Polinom pol1 = new ClsPolinom.Polinom();
-                ClsPolinom.Polinom pol2 = new ClsPolinom.Polinom();
                 
-                pol1 = ClsPolinom.Polinom.PolinomFromString("4x^3+2x^2-3x+5");
-                pol2= ClsPolinom.Polinom.PolinomFromString("x-1");
-/*
-                ClsPolinom.Polinom Pol3 = new ClsPolinom.Polinom();
-
-                Pol3 = pol1 * pol2;
-
-                
-                */
-
-                /*
-                ClsPolinom.Polinom Pol4 = new ClsPolinom.Polinom();
-                Pol4 = ClsPolinom.Polinom.Sorter(pol2);
-                ClsPolinom.Polinom Pol5 = new ClsPolinom.Polinom();
-
-                Pol5 = pol1/ pol2;
-                /*
-                ClsPolinom.Polinom Pol6 = new ClsPolinom.Polinom();
-                ClsPolinom.Polinom Pol7 = new ClsPolinom.Polinom();
-
-                Pol6 = ClsPolinom.Polinom.PolinomFromString("19x2+27x+8");
-                Pol7 = ClsPolinom.Polinom.calcPolinomToZp(Pol6, 7);
-                string s = Pol7.ToString();
-                
-
-                List<ClsPolinom.Polinom> irreducible = new List<ClsPolinom.Polinom>();
-                //irreducible = ClsPolinom.Polinom.getIrreducible(1, 2);
-                //irreducible = ClsPolinom.Polinom.getIrreducible(1, 3);
-                //irreducible = ClsPolinom.Polinom.getIrreducible(4, 2);
-               // irreducible = ClsPolinom.Polinom.getIrreducible(4, 3);
-
-                //ClsPolinom.Polinom pol8 = new ClsPolinom.Polinom();
-                //pol8 = ClsPolinom.Polinom.Pow(ClsPolinom.Polinom.PolinomFromString("x+1"), 0);
-               // ClsPolinom.Polinom pol9 = new ClsPolinom.Polinom();
-                //pol9 = ClsPolinom.Polinom.Pow(ClsPolinom.Polinom.PolinomFromString("x+1"), 1);
-                
-    */
                 if (poli1 != null) {
                     string strPolinom = "";
                     
@@ -485,12 +452,13 @@ namespace ProjektLab
                         resPoli = poli1 % poli2;
                         break;
                 }
-                //resPoli = poli1 + poli2;
+                
 
                 if (modulo != 0) { resPoli = ClsPolinom.Polinom.calcPolinomToZp(resPoli, modulo); }
                 displayPolinom(resPoli);
                 tbkPolinom.Inlines.Clear();
                 isFunction = false;
+                isExponent = false;
                 
             }
 

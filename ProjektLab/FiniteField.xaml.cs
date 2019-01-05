@@ -16,6 +16,7 @@ using FiniteFieldLibrary;
 using ClsPolinom;
 using System.Threading;
 using System.IO;
+using System.Diagnostics;
 
 namespace ProjektLab
 {
@@ -96,13 +97,20 @@ namespace ProjektLab
 
         private void buttonClick(object sender, RoutedEventArgs e)
         {
+           
+            
             Button.IsEnabled = false;
             ButtonSpinner.Visibility = Visibility.Visible;
+            
             getIrreducible();
+           
         }
 
         private async void getIrreducible()
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Reset();
+            sw.Start();
             IrreducibleThread = null;
             List<ClsPolinom.Polinom> list = await Task.Run<List<ClsPolinom.Polinom>>(() =>
             {
@@ -112,6 +120,8 @@ namespace ProjektLab
             polinom.ItemsSource = list;
             IrreducibleThread = null;
             ButtonSpinner.Visibility = Visibility.Hidden;
+            sw.Stop();
+            tbTime.Text = sw.Elapsed.ToString();
             Button.IsEnabled = true;
         }
 

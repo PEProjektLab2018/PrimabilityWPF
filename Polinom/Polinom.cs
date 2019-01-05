@@ -28,7 +28,7 @@ namespace ClsPolinom
         public Polinom(Polinom P)
         {
             this.list = new List<Monom>(P.list.Count());
-            foreach(Monom m in P.list)
+            foreach (Monom m in P.list)
             {
                 this.add(new Monom(m));
             }
@@ -144,7 +144,7 @@ namespace ClsPolinom
         {
             Polinom Polinom2Neg = new Polinom();
 
-            foreach(Monom m in Polinom2.List)
+            foreach (Monom m in Polinom2.List)
             {
                 Polinom2Neg.add(new Monom((-1) * m.Coefficient, m.Exponent));
             }
@@ -203,6 +203,11 @@ namespace ClsPolinom
             return remainder;
         }
 
+        public bool Equals(Polinom pol1, Polinom pol2)
+        {
+            return pol1.ToString() == pol2.ToString();
+        }
+
         private static int biggestPower(Polinom polinom)
         {
             polinom = Sorter(polinom);
@@ -238,6 +243,8 @@ namespace ClsPolinom
             List<Polinom> candidatePolinoms;
             Polinom PoweredPolinom = new Polinom();
             bool isIrreducible;
+            bool isExists;
+            bool isTest;
 
             for (int pow = 1; pow <= power; pow++)
             {
@@ -256,63 +263,111 @@ namespace ClsPolinom
                 }
                 else
                 {
-                    // testPolinoms = new List<Polinom>();
+                    //  testPolinoms = new List<Polinom>();
                     foreach (Polinom poli in IrreduciblePolinoms)
                     {
                         for (int i = 1; i <= pow; i++)
                         {
+                            isTest = false;
                             if (biggestPower(calcPolinomToZp(Pow(poli, i), p)) <= pow)
                             {
-                                testPolinoms.Add(calcPolinomToZp(Pow(poli, i), p));
+                                
+                                foreach (Polinom tp in testPolinoms) {
+                                    if (tp.ToString() == calcPolinomToZp(Pow(poli, i), p).ToString()) {
+                                        isTest = true;
+                                        break;
+                                    }
+                                }
+
+                                if (isTest == false) {
+                                    testPolinoms.Add(calcPolinomToZp(Pow(poli, i), p)); }
                             }
                         }
                     }
 
-
+                    multiplyPolinoms = new List<Polinom>();
                     for (int start = 0; start < testPolinoms.Count - 1; start++)
                     {
                         for (int end = start + 1; end < testPolinoms.Count; end++)
                         {
-                            if (biggestPower(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p)) <= pow)
+                            if (biggestPower(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p)) == pow)  //ez itt kisebbegyenlő volt
                             {
+                                isExists = false;
+                                //Predicate<Monom> predicate = (mon => mon.Variable == monom.Variable && mon.Exponent == monom.Exponent);
 
-                                multiplyPolinoms.Add(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p));
+                                foreach (Polinom poli in multiplyPolinoms)
+                                {
+                                    isExists = false;
+                                    if (poli.ToString() == calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p).ToString())
+                                    {
+                                        isExists = true;
+                                        break;
+
+                                    }
+                                }
+
+                                if (isExists == false) { multiplyPolinoms.Add(calcPolinomToZp(testPolinoms[start] * testPolinoms[end], p)); }
+
+
+
+
+                            }
+                        }
+                    }
+
+
+                        foreach (Polinom m in multiplyPolinoms)
+                        {
+                            if (biggestPower(m) <= pow)
+                            {
+                                isTest = false;
+                                foreach (Polinom tp in testPolinoms)
+                                {
+                                    if (tp.ToString() == m.ToString())
+                                    {
+                                        isTest = true;
+                                        break;
+                                    }
+                                }
+
+                                if (isTest == false)
+                                { testPolinoms.Add(m); }
                             }
                         }
 
-                    }
-
-                    foreach (Polinom m in multiplyPolinoms)
-                    {
-                        if (biggestPower(m) <= pow)
+                        foreach (Polinom candidate in candidatePolinoms)
                         {
-                            testPolinoms.Add(m);
-                        }
-                    }
+                            isIrreducible = true;
 
-                    foreach (Polinom candidate in candidatePolinoms)
-                    {
-                        isIrreducible = true;
-
-                        foreach (Polinom tp in testPolinoms)
-                        {
-                            if (candidate.ToString() == tp.ToString())
+                            foreach (Polinom tp in testPolinoms.Where(param => biggestPower(param)==pow ))
                             {
-                                isIrreducible = false;
-                                break;
+                                isIrreducible = true;
+                                if (candidate.ToString() == tp.ToString())
+                                {
+                                    isIrreducible = false;
+                                    break;
+
+                                }
+
+                                foreach (Polinom ip in IrreduciblePolinoms) {
+                                    if (candidate.ToString() == ip.ToString()){
+                                        isIrreducible = false;
+                                        break;
+                                    }
+                                }
                             }
-                        }
-                        if (isIrreducible == true)
-                        {
-                            IrreduciblePolinoms.Add(candidate);
-                            testPolinoms.Add(candidate);
+                            if (isIrreducible == true)
+                            {
+                                IrreduciblePolinoms.Add(candidate);
+                                testPolinoms.Add(candidate);
+                            }
+
                         }
 
-                    }
-
+                    //}
                 }
             }
-            return IrreduciblePolinoms;
+                return IrreduciblePolinoms;
 
         }
 
